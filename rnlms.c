@@ -19,6 +19,7 @@ NUM SIGN(NUM a)
 		return -1.0;
 }
 
+//создаёт структуру для фильтра
 SimpleIIRFilter* rlms_init(void)
 {
 	SimpleIIRFilter *rez = malloc (sizeof(SimpleIIRFilter));
@@ -48,52 +49,7 @@ NUM filter_output(const SimpleIIRFilter *f)
 	return rez;
 }
 
-/* struct error_sample */
-/* { */
-/* 	double value; */
-/* 	int life_time; */
-/* }; */
-
-
-/* NUM median_search(struct error_sample A[], double current_error) */
-/* { */
-/* 	int i,j,k; */
-
-/* 	current_error=fabs(current_error); */
-
-/* 	for(i=0, j=k=-1; i<P; i++) */
-/* 	{ */
-/* 		if(A[i].value<current_error) j=i; */
-/* 		if(A[i].life_time==0) k=i; */
-/* 		A[i].life_time--; */
-/* 	} */
-
-/* 	if(k<j) */
-/* 	{ */
-/* 		for(i=k; i<j; i++) */
-/* 			A[i]=A[i+1]; */
-/* 		A[j].value=current_error; */
-/* 		A[j].life_time=P-1; */
-/* 	} */
-
-/* 	if(k>j) */
-/* 	{ */
-/* 		for(i=k; i>j; i--) */
-/* 			A[i]=A[i-1]; */
-/* 		A[j+1].value=current_error; */
-/* 		A[j+1].life_time=P-1; */
-
-/* 	} */
-
-/* 	if(k==j) */
-/* 	{ */
-/* 		A[j].value=current_error; */
-/* 		A[j].life_time=P-1; */
-/* 	} */
-
-/* 	return (P%2)?A[(P-1)/2].value:(A[P/2].value+A[P/2-1].value)/2.0; */
-/* } */
-
+//вычисляет X*X'
 NUM calc_norma (const NUM *A, size_t len)
 {
 	NUM tmp = 0.0;
@@ -107,6 +63,7 @@ NUM calc_norma (const NUM *A, size_t len)
 	return tmp;
 }
 
+
 void insert_right(NUM *arr, NUM val, size_t len)
 {
 	for (size_t i = len-1; i > 0; --i)
@@ -116,6 +73,7 @@ void insert_right(NUM *arr, NUM val, size_t len)
 	arr[0]=val;
 }
 
+//выполняет для адаптацию
 NUM rlms_func(SimpleIIRFilter *f, NUM far, NUM near, NUM *err, NUM *output)
 {
 	//memmove(f->sig+1, f->sig, (f->len-1)*sizeof(NUM));//сдвигаем коэффициенты вправо
