@@ -1,6 +1,6 @@
 #include "rnlms.h"
 
-#define SIGMA 0.01 // корень из сигмы
+#define SIGMA 0.01 // корень из сигмы, несовсем понятно в какую сторону его крутить
 #define BETTA 100
 
 NUM MIN(NUM a, NUM b)
@@ -136,7 +136,6 @@ NUM rlms_func(SimpleIIRFilter *f, NUM far, NUM near, NUM *err, NUM *output)
 		else
 			f->coeff[i] += SIGMA*SIGN(*err)*(f->coeff[i]/(BETTA+norma));
 		
-//		f->coeff[i] += (*err)*(f->sig[i]/(BETTA+norma)) ; NLMS работает
 	}
 //	printf("\n");
 	/* printf("%g %g %g\n", f->coeff[0], f->coeff[f->len/2], f->coeff[f->len-1]); */
