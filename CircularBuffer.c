@@ -15,6 +15,20 @@ CB_calc_pos(const CB * const buf, size_t pos)
 }
 
 NUM
+convolution_CB_and_CB(const CB * const buf0, const CB * const buf1)
+{
+	if (buf0->len != buf1->len)
+		assert ("convolution_CB_and_CB: sizes of buffers must be the same");
+	size_t i;
+	NUM rez = 0.0;
+	for (i=0; i<buf0->len; ++i)
+	{
+		rez += buf0->data[i] * buf1->data[i];
+	}
+	return rez;
+}
+
+NUM
 convolution_CB_and_vector(const CB * const buf, const NUM * const vec)
 {
 	/* size_t i; */

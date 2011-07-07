@@ -15,8 +15,8 @@ typedef struct
 	NUM BETTA;
 	NUM SIGMA;
 	size_t len;
-	NUM *sig;
-//	CB* sig;
+//	NUM *sig;
+	CB* sig; //надо инициализировать самому
 	NUM coeff[];
 } SimpleIIRFilter ;
 

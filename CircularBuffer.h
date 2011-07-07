@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 #include "global.h"
 
 typedef struct {
@@ -24,6 +25,8 @@ size_t CB_size(size_t len);
 CB* CB_init(void* mem, size_t len);
 
 NUM convolution_CB_and_vector(const CB * const buf, const NUM * const vec);
+NUM convolution_CB_and_CB(const CB * const buf0, const CB * const buf1);
+
 void CB_push_elem(CB * const buf, NUM elem);
 NUM CB_get_elem(const CB * const buf, size_t pos);
 

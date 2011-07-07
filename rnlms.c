@@ -24,7 +24,7 @@ size_t rlms_sizeOfRequiredMemory(size_t filter_len)
 {
 	return sizeof(SimpleIIRFilter) +	\
 		(sizeof(NUM[filter_len])) +	\
-		(sizeof(NUM[filter_len])) ;
+		(CB_size(filter_len)) ;
 }
 
 //инициализирует структуру для фильтра, по уже выделенной памяти
@@ -34,32 +34,34 @@ SimpleIIRFilter* rlms_init(void *mem, NUM BETTA, NUM SIGMA, size_t filter_len)
 	rez->len = filter_len;
 	rez->BETTA = BETTA;
 	rez->SIGMA = SIGMA;
-	rez->sig = &(rez->coeff[rez->len]);//ещё хак против выравнивания
 
-	/* rez->coeff = &rez[1];//енто такой хак против выравнивания */
+	// rez->coeff этоflexible array member
+	
+	rez->sig = CB_init(&rez->coeff[rez->len], rez->len);
 
 
 	int i = 0;
 	for (; i<rez->len; ++i)
 	{
 		rez->coeff[i] = 0.0;
-		rez->sig[i] = 0.0;
+//		rez->sig[i] = 0.0;
 	}
 	return rez;
 }
 
 NUM filter_output(const SimpleIIRFilter *f)
 {
-	NUM rez=0.0;
-	int i = 0;
+	/* NUM rez=0.0; */
+	/* int i = 0; */
 	/* NUM *coeff = f->coeff; */
 	/* NUM *sig = f->sig; */
 	
-	for(; i < f->len; ++i)
-	{
-		rez += f->coeff[i] * f->sig[i];
-	}
-	return rez;
+	/* for(; i < f->len; ++i) */
+	/* { */
+	/* 	rez += f->coeff[i] * f->sig[i]; */
+	/* } */
+	
+	return convolution_CB_and_vector(f->sig, f->coeff);
 }
 
 //вычисляет X*X'
@@ -90,22 +92,26 @@ void insert_right(NUM *arr, NUM val, size_t len)
 NUM rlms_func(SimpleIIRFilter *f, NUM far, NUM near, NUM *err, NUM *output)
 {
 	//memmove(f->sig+1, f->sig, (f->len-1)*sizeof(NUM));//сдвигаем коэффициенты вправо
-	insert_right(f->sig, far, f->len);
+	//insert_right(f->sig, far, f->len);
+	CB_push_elem(f->sig, far);
 
 	*output = filter_output(f);
 	*err = near - *output;
-	NUM norma = calc_norma(f->sig, f->len);
+//	NUM norma = calc_norma(f->sig, f->len);
+	NUM norma = convolution_CB_and_CB(f->sig, f->sig);
 	printf ("far %g norma %g, err %g\n", far, norma, *err);
 	
 //	printf("%g  %g %g\n", *err, (100+sqrt(norma)), norma);
 
-	for (int i =0; i<f->len; ++i)
+	NUM tmp = (NUM_abs(*err)/sqrt(norma));
+
+	for (size_t i =0; i<f->len; ++i)
 	{
-		NUM tmp = (NUM_abs(*err)/sqrt(norma));
-		if (tmp < f->SIGMA)
-             		f->coeff[i] += (*err)*(f->sig[i]/(f->BETTA+norma));
+		NUM x_i = CB_get_elem(f->sig, i);
+ 		if (tmp < f->SIGMA)
+             		f->coeff[i] += (*err)*(x_i/(f->BETTA+norma));
 		else
-			f->coeff[i] += f->SIGMA*SIGN(*err)*(f->coeff[i]/sqrt(f->BETTA+norma));
+			f->coeff[i] += f->SIGMA*SIGN(*err)*(x_i/sqrt(f->BETTA+norma));
 		
 	}
 //	printf("\n");
