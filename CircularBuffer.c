@@ -11,6 +11,16 @@
 size_t
 CB_calc_pos(const CB * const buf, size_t pos)
 {
+
+	/* этот вариант может сгодится если мы не любим делить */
+	/* size_t tmp = buf->begin + pos; */
+		
+	/* while (tmp >= buf->len) */
+	/* { */
+	/* 	tmp -= buf->len; */
+	/* } */
+	/* return tmp; */
+	
 	return (buf->begin + pos + buf->len)%(buf->len); //если длина буфера 2^n то можно тут сэкономить
 }
 

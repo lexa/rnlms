@@ -77,7 +77,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 			int16_t e_, o_;
 			e_ = err[writedNums];
 			o_ = output[writedNums];
-			printf("%d %d %g %g\n", e_, o_, err[writedNums], output[writedNums]);
+//			printf("%d %d %g %g\n", e_, o_, err[writedNums], output[writedNums]);
 			fwrite(&e_, sizeof(int16_t), 1, err_file);
 			fwrite(&o_, sizeof(int16_t), 1, output_file);
 		}
