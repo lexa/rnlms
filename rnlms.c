@@ -88,6 +88,48 @@ void insert_right(NUM *arr, NUM val, size_t len)
 	arr[0]=val;
 }
 
+//proprietary
+/* NUM median_search(struct error_sample A[], double current_error) */
+/* { */
+/* 	int i,j,k; */
+
+/* 	current_error=fabs(current_error); */
+
+/* 	for(i=0, j=k=-1; i<P; i++) */
+/* 	{ */
+/* 		if(A[i].value<current_error)  */
+/* 			j=i; */
+/* 		if(A[i].life_time==0)  */
+/* 			k=i; */
+/* 		A[i].life_time--; */
+/* 	} */
+
+/* 	if(k<j) */
+/* 	{ */
+/* 		for(i=k; i<j; i++) */
+/* 			A[i]=A[i+1]; */
+/* 		A[j].value=current_error; */
+/* 		A[j].life_time=P-1; */
+/* 	} */
+
+/* 	if(k>j) */
+/* 	{ */
+/* 		for(i=k; i>j; i--) */
+/* 			A[i]=A[i-1]; */
+/* 		A[j+1].value=current_error; */
+/* 		A[j+1].life_time=P-1; */
+
+/* 	} */
+
+/* 	if(k==j) */
+/* 	{ */
+/* 		A[j].value=current_error; */
+/* 		A[j].life_time=P-1; */
+/* 	} */
+
+/* 	return (P%2)?A[(P-1)/2].value:(A[P/2].value+A[P/2-1].value)/2.0; */
+/* } */
+
 //выполняет для адаптацию
 NUM rlms_func(SimpleIIRFilter *f, NUM far, NUM near, NUM *err, NUM *output)
 {
@@ -105,14 +147,23 @@ NUM rlms_func(SimpleIIRFilter *f, NUM far, NUM near, NUM *err, NUM *output)
 
 	NUM tmp = (NUM_abs(*err)/sqrt(norma));
 
-	for (size_t i =0; i<f->len; ++i)
+	if (tmp < f->SIGMA) 
 	{
-		NUM x_i = CB_get_elem(f->sig, i);
- 		if (tmp < f->SIGMA)
-             		f->coeff[i] += (*err)*(x_i/(f->BETTA+norma));
-		else
-			f->coeff[i] += f->SIGMA*SIGN(*err)*(x_i/sqrt(f->BETTA+norma));
-		
+		NUM tmp = f->BETTA+norma;
+		for (size_t i =0; i<f->len; ++i)
+		{
+			NUM x_i = CB_get_elem(f->sig, i);
+             		f->coeff[i] += (*err)*(x_i/tmp);
+			
+		}
+	} else {
+		NUM tmp = sqrt(f->BETTA+norma) * SIGN(*err);
+		for (size_t i =0; i<f->len; ++i)
+		{
+			NUM x_i = CB_get_elem(f->sig, i);
+			f->coeff[i] += f->SIGMA*(x_i/tmp);
+			
+		}
 	}
 //	printf("\n");
 	/* printf("%g %g %g\n", f->coeff[0], f->coeff[f->len/2], f->coeff[f->len-1]); */
