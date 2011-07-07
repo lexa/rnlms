@@ -1,11 +1,22 @@
 CC=gcc
 CFLAGS=-Wall -pedantic -std=c99 -ggdb
-OBJ=rnlms.o tester.o  CircularBuffer.o
+OBJS=rnlms.o tester.o  CircularBuffer.o
 HEAD=global.h rnlms.h CircularBuffer.h
 
 all:main
-main: $(HEAD) $(OBJ)
-		$(CC) $(OBJ) $(CFLAGS) -o main -lm
+
+# ${OBJS}: *.c *.h Makefile
+# 		$(CC) %.c %.h $(CFLAGS)
+
+# %.o: %.c 
+# 		$(CC) $%.c $%.h $(CFLAGS)
+
+
+$(OBJS): %.o: %.c %.h Makefile
+		$(CC) -c $(CFLAGS) $< -o $@
+
+main: $(HEAD) $(OBJS)
+		$(CC) $(OBJS) $(CFLAGS) -o main -lm
 
 clean:
 		rm -f *.o main
