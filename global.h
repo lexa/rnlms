@@ -5,12 +5,6 @@
 typedef double NUM;
 
 
-typedef struct 
-{
-	NUM *coeff;
-	NUM *sig;
-	size_t len;
-} SimpleIIRFilter ;
 
 #define NUM_abs(x) fabs(x)
 

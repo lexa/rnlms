@@ -1,7 +1,7 @@
 #include "rnlms.h"
 
-#define SIGMA 1 // корень из сигмы, несовсем понятно в какую сторону его крутить
-#define BETTA 100
+/* #define SIGMA 1 // корень из сигмы, несовсем понятно в какую сторону его крутить */
+/* #define BETTA 100 */
 
 
 NUM MIN(NUM a, NUM b)
@@ -20,14 +20,24 @@ NUM SIGN(NUM a)
 		return -1.0;
 }
 
-//создаёт структуру для фильтра
-SimpleIIRFilter* rlms_init(void)
+size_t rlms_sizeOfRequiredMemory(size_t filter_len)
 {
-	SimpleIIRFilter *rez = malloc (sizeof(SimpleIIRFilter));
-	rez->len = FILTER_LEN;
-	rez->coeff = malloc (sizeof(NUM) * rez->len);
-	rez->sig = malloc (sizeof(NUM) * rez->len);
-	int i =0;
+	return sizeof(SimpleIIRFilter) +	\
+		(sizeof(NUM[filter_len])) +	\
+		(sizeof(NUM[filter_len])) ;
+}
+
+//инициализирует структуру для фильтра, по уже выделенной памяти
+SimpleIIRFilter* rlms_init(void *mem, NUM BETTA, NUM SIGMA, size_t filter_len)
+{
+	SimpleIIRFilter *rez = mem;
+	rez->len = filter_len;
+	rez->BETTA = BETTA;
+	rez->SIGMA = SIGMA;
+	rez->coeff = &rez[1];//енто такой хак против выравнивания
+	rez->sig = &(rez->coeff[rez->len]);//ещё хак против выравнивания
+
+	int i = 0;
 	for (; i<rez->len; ++i)
 	{
 		rez->coeff[i] = 0.0;
@@ -40,12 +50,12 @@ NUM filter_output(const SimpleIIRFilter *f)
 {
 	NUM rez=0.0;
 	int i = 0;
-	NUM *coeff = f->coeff;
-	NUM *sig = f->sig;
+	/* NUM *coeff = f->coeff; */
+	/* NUM *sig = f->sig; */
 	
-	for(; i < f->len; ++i, ++coeff, ++sig)
+	for(; i < f->len; ++i)
 	{
-		rez += (*coeff) * (*sig);
+		rez += f->coeff[i] * f->sig[i];
 	}
 	return rez;
 }
@@ -55,10 +65,10 @@ NUM calc_norma (const NUM *A, size_t len)
 {
 	NUM tmp = 0.0;
 	int i = 0;
-	const NUM *p = A;//указатель на A[i]
-	for (; i < len; ++p, ++i)
+//	const NUM *p = A;//указатель на A[i]
+	for (; i < len; ++i)
 	{
-		tmp += (*p) * (*p);
+		tmp += A[i] * A[i];
 	}
 //	return sqrt(tmp);
 	return tmp;
@@ -90,10 +100,10 @@ NUM rlms_func(SimpleIIRFilter *f, NUM far, NUM near, NUM *err, NUM *output)
 	for (int i =0; i<f->len; ++i)
 	{
 		NUM tmp = (NUM_abs(*err)/sqrt(norma));
-		if (tmp < SIGMA)
-             		f->coeff[i] += (*err)*(f->sig[i]/(BETTA+norma));
+		if (tmp < f->SIGMA)
+             		f->coeff[i] += (*err)*(f->sig[i]/(f->BETTA+norma));
 		else
-			f->coeff[i] += SIGMA*SIGN(*err)*(f->coeff[i]/sqrt(BETTA+norma));
+			f->coeff[i] += f->SIGMA*SIGN(*err)*(f->coeff[i]/sqrt(f->BETTA+norma));
 		
 	}
 //	printf("\n");

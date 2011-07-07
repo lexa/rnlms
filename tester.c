@@ -7,6 +7,7 @@
 
 
 #define FRAME_SIZE    80
+#define FILTER_LEN   300
 
 
 typedef NUM (*FunctionOfTwoArgs)(void* pFilter, NUM, NUM, NUM*, NUM*);
@@ -22,13 +23,13 @@ void testBlock(FunctionOfTwoArgs func, void  *filterStruct, const NUM *far, cons
 	}
 }
 
-void testAlgo(FunctionOfTwoArgs func, InitFilterStruct initializer, 
+void testAlgo(FunctionOfTwoArgs func, void* filterStruct, 
 	      const char *far_filename, 
 	      const char *near_filename, 
 	      const char *err_filename, 
 	      const char *output_filename)
 {
-	void *filterStruct = initializer();
+//	void *filterStruct = initializer();
 	
 	FILE *far_file = NULL,
 		*near_file = NULL,
@@ -46,7 +47,6 @@ void testAlgo(FunctionOfTwoArgs func, InitFilterStruct initializer,
 	NUM near [FRAME_SIZE];
 	NUM err [FRAME_SIZE];
 	NUM output [FRAME_SIZE];
-
 
 	while(!feof(far_file) && !feof(near_file)) 
 	{
@@ -93,7 +93,10 @@ void testAlgo(FunctionOfTwoArgs func, InitFilterStruct initializer,
 
 int  main()
 {
-	testAlgo(rlms_func, rlms_init, \
+	void *filterStruct = malloc(rlms_sizeOfRequiredMemory(FILTER_LEN));
+	rlms_init(filterStruct, 100, 0.1, FILTER_LEN);
+
+	testAlgo(rlms_func, filterStruct,       \
 		 "g165/filtered_noise_10.dat", \
 		 "g165/echo_10_128.dat", \
 		 "error.dat", \
