@@ -34,8 +34,10 @@ SimpleIIRFilter* rlms_init(void *mem, NUM BETTA, NUM SIGMA, size_t filter_len)
 	rez->len = filter_len;
 	rez->BETTA = BETTA;
 	rez->SIGMA = SIGMA;
-	rez->coeff = &rez[1];//енто такой хак против выравнивания
 	rez->sig = &(rez->coeff[rez->len]);//ещё хак против выравнивания
+
+	/* rez->coeff = &rez[1];//енто такой хак против выравнивания */
+
 
 	int i = 0;
 	for (; i<rez->len; ++i)

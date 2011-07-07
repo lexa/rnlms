@@ -12,11 +12,12 @@
 
 typedef struct 
 {
-	NUM *coeff;
-	NUM *sig;
 	NUM BETTA;
 	NUM SIGMA;
 	size_t len;
+	NUM *sig;
+//	CB* sig;
+	NUM coeff[];
 } SimpleIIRFilter ;
 
 //typedef SimpleIIRFilter* (*InitFilterStruct)(void);
