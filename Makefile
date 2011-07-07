@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-Wall -pedantic -std=c99 -ggdb
-OBJS=rnlms.o tester.o  CircularBuffer.o
+OBJS=rnlms.o tester.o  CircularBuffer.o global.o
 HEAD=global.h rnlms.h CircularBuffer.h
 
 all:main

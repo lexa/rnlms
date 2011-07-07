@@ -19,9 +19,9 @@ convolution_CB_and_CB(const CB * const buf0, const CB * const buf1)
 {
 	if (buf0->len != buf1->len)
 		assert ("convolution_CB_and_CB: sizes of buffers must be the same");
-	size_t i;
+	size_t i=0;
 	NUM rez = 0.0;
-	for (i=0; i<buf0->len; ++i)
+	for (; i<buf0->len; ++i)
 	{
 		rez += buf0->data[i] * buf1->data[i];
 	}
@@ -67,6 +67,11 @@ CB_init(void* mem, size_t len)
 	CB* buf=mem;
 	buf->len = len;
 	buf->begin = 0;
+	
+	for (size_t i = 0; i<buf->len; ++i)
+	{
+		buf->data[i] = 0.0;
+	}
 	return buf;
 }
 

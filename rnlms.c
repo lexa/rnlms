@@ -6,6 +6,7 @@ typedef struct
 {
 	NUM BETTA;
 	NUM SIGMA;
+	NUM norma;
 	size_t len;
 //	NUM *sig;
 	CB* sig; //надо инициализировать самому
@@ -43,7 +44,7 @@ void* rlms_init(void *mem, NUM BETTA, NUM SIGMA, size_t filter_len)
 	rez->len = filter_len;
 	rez->BETTA = BETTA;
 	rez->SIGMA = SIGMA;
-
+	rez->norma = 0.0;
 	// rez->coeff этоflexible array member
 	
 	rez->sig = CB_init(&rez->coeff[rez->len], rez->len);
@@ -102,21 +103,18 @@ void insert_right(NUM *arr, NUM val, size_t len)
 NUM rlms_func(void *f_, NUM far, NUM near, NUM *err, NUM *output)
 {
 	SimpleIIRFilter *f = f_;
-	//memmove(f->sig+1, f->sig, (f->len-1)*sizeof(NUM));//сдвигаем коэффициенты вправо
-	//insert_right(f->sig, far, f->len);
+
+//	NUM norma = convolution_CB_and_CB(f->sig, f->sig); 
+	f->norma += sqr(far) - sqr(CB_get_elem(f->sig, f->len)) ;  
+
 	CB_push_elem(f->sig, far);
 
-	*output = filter_output(f);
+	*output = filter_output(f); 
 	*err = near - *output;
-//	NUM norma = calc_norma(f->sig, f->len);
-	const NUM norma = convolution_CB_and_CB(f->sig, f->sig);
-	printf ("far %g norma %g, err %g\n", far, norma, *err);
-	
-//	printf("%g  %g %g\n", *err, (100+sqrt(norma)), norma);
 
-	if ((NUM_abs(*err)/sqrt(norma)) < f->SIGMA) 
+	if ((NUM_abs(*err)/sqrt(f->norma)) < f->SIGMA) 
 	{
-		NUM tmp = f->BETTA+norma;
+		NUM tmp = f->BETTA+f->norma;
 		for (size_t i =0; i<f->len; ++i)
 		{
 			NUM x_i = CB_get_elem(f->sig, i);
@@ -124,7 +122,7 @@ NUM rlms_func(void *f_, NUM far, NUM near, NUM *err, NUM *output)
 			
 		}
 	} else {
-		NUM tmp = sqrt(f->BETTA+norma) * SIGN(*err);
+		NUM tmp = sqrt(f->BETTA + f->norma) * SIGN(*err);
 		for (size_t i =0; i<f->len; ++i)
 		{
 			NUM x_i = CB_get_elem(f->sig, i);
