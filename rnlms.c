@@ -140,14 +140,12 @@ NUM rlms_func(SimpleIIRFilter *f, NUM far, NUM near, NUM *err, NUM *output)
 	*output = filter_output(f);
 	*err = near - *output;
 //	NUM norma = calc_norma(f->sig, f->len);
-	NUM norma = convolution_CB_and_CB(f->sig, f->sig);
+	const NUM norma = convolution_CB_and_CB(f->sig, f->sig);
 	printf ("far %g norma %g, err %g\n", far, norma, *err);
 	
 //	printf("%g  %g %g\n", *err, (100+sqrt(norma)), norma);
 
-	NUM tmp = (NUM_abs(*err)/sqrt(norma));
-
-	if (tmp < f->SIGMA) 
+	if ((NUM_abs(*err)/sqrt(norma)) < f->SIGMA) 
 	{
 		NUM tmp = f->BETTA+norma;
 		for (size_t i =0; i<f->len; ++i)
