@@ -1,7 +1,16 @@
 #include "rnlms.h"
 
-/* #define SIGMA 1 // корень из сигмы, несовсем понятно в какую сторону его крутить */
-/* #define BETTA 100 */
+
+//структура не должна торчать наружу
+typedef struct 
+{
+	NUM BETTA;
+	NUM SIGMA;
+	size_t len;
+//	NUM *sig;
+	CB* sig; //надо инициализировать самому
+	NUM coeff[];
+} SimpleIIRFilter ;
 
 
 NUM MIN(NUM a, NUM b)
@@ -28,7 +37,7 @@ size_t rlms_sizeOfRequiredMemory(size_t filter_len)
 }
 
 //инициализирует структуру для фильтра, по уже выделенной памяти
-SimpleIIRFilter* rlms_init(void *mem, NUM BETTA, NUM SIGMA, size_t filter_len)
+void* rlms_init(void *mem, NUM BETTA, NUM SIGMA, size_t filter_len)
 {
 	SimpleIIRFilter *rez = mem;
 	rez->len = filter_len;
@@ -88,51 +97,11 @@ void insert_right(NUM *arr, NUM val, size_t len)
 	arr[0]=val;
 }
 
-//proprietary
-/* NUM median_search(struct error_sample A[], double current_error) */
-/* { */
-/* 	int i,j,k; */
-
-/* 	current_error=fabs(current_error); */
-
-/* 	for(i=0, j=k=-1; i<P; i++) */
-/* 	{ */
-/* 		if(A[i].value<current_error)  */
-/* 			j=i; */
-/* 		if(A[i].life_time==0)  */
-/* 			k=i; */
-/* 		A[i].life_time--; */
-/* 	} */
-
-/* 	if(k<j) */
-/* 	{ */
-/* 		for(i=k; i<j; i++) */
-/* 			A[i]=A[i+1]; */
-/* 		A[j].value=current_error; */
-/* 		A[j].life_time=P-1; */
-/* 	} */
-
-/* 	if(k>j) */
-/* 	{ */
-/* 		for(i=k; i>j; i--) */
-/* 			A[i]=A[i-1]; */
-/* 		A[j+1].value=current_error; */
-/* 		A[j+1].life_time=P-1; */
-
-/* 	} */
-
-/* 	if(k==j) */
-/* 	{ */
-/* 		A[j].value=current_error; */
-/* 		A[j].life_time=P-1; */
-/* 	} */
-
-/* 	return (P%2)?A[(P-1)/2].value:(A[P/2].value+A[P/2-1].value)/2.0; */
-/* } */
 
 //выполняет для адаптацию
-NUM rlms_func(SimpleIIRFilter *f, NUM far, NUM near, NUM *err, NUM *output)
+NUM rlms_func(void *f_, NUM far, NUM near, NUM *err, NUM *output)
 {
+	SimpleIIRFilter *f = f_;
 	//memmove(f->sig+1, f->sig, (f->len-1)*sizeof(NUM));//сдвигаем коэффициенты вправо
 	//insert_right(f->sig, far, f->len);
 	CB_push_elem(f->sig, far);

@@ -10,21 +10,14 @@
 
 //#define FILTER_LEN 300;
 
-typedef struct 
-{
-	NUM BETTA;
-	NUM SIGMA;
-	size_t len;
-//	NUM *sig;
-	CB* sig; //надо инициализировать самому
-	NUM coeff[];
-} SimpleIIRFilter ;
 
-//typedef SimpleIIRFilter* (*InitFilterStruct)(void);
-
-SimpleIIRFilter* rlms_init(void *mem, NUM BETTA, NUM SIGMA, size_t filter_len);
-NUM rlms_func(SimpleIIRFilter*, NUM, NUM, NUM* err, NUM* out);
+//показывает сколько памяти портебуется для хранения фильтра длинны filter_len
 size_t rlms_sizeOfRequiredMemory(size_t filter_len);
+
+//инициализирует структуру филтра, по уже выделенной памяти, сама функция ничего не выделяет
+void* rlms_init(void *mem, NUM BETTA, NUM SIGMA, size_t filter_len); 
+
+NUM rlms_func(void*, NUM, NUM, NUM* err, NUM* out);
 
 #endif /* _RNLMS_H_ */
 
