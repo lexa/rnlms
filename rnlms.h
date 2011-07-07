@@ -3,6 +3,7 @@
 #define _RNLMS_H_
 
 #include "global.h"
+#include "CircularBuffer.h"
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
