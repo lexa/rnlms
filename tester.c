@@ -9,10 +9,9 @@
 #define FRAME_SIZE    80
 
 
-typedef NUM (*FunctionOfTwoArgs)(SimpleIIRFilter*, NUM, NUM, NUM*, NUM*);
-typedef SimpleIIRFilter* (*InitFilterStruct)(void);
+typedef NUM (*FunctionOfTwoArgs)(void* pFilter, NUM, NUM, NUM*, NUM*);
 
-void testBlock(FunctionOfTwoArgs func, SimpleIIRFilter  *filterStruct, const NUM *far, const NUM *near, NUM *err, NUM* output, int arrayLen)
+void testBlock(FunctionOfTwoArgs func, void  *filterStruct, const NUM *far, const NUM *near, NUM *err, NUM* output, int arrayLen)
 {
 	int i=0;
 	for (; i< arrayLen; ++i, ++far, ++near, ++err, ++output)
@@ -29,7 +28,7 @@ void testAlgo(FunctionOfTwoArgs func, InitFilterStruct initializer,
 	      const char *err_filename, 
 	      const char *output_filename)
 {
-	SimpleIIRFilter *filterStruct = initializer();
+	void *filterStruct = initializer();
 	
 	FILE *far_file = NULL,
 		*near_file = NULL,

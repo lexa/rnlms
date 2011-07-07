@@ -9,6 +9,8 @@
 
 #define FILTER_LEN 300;
 
+typedef SimpleIIRFilter* (*InitFilterStruct)(void);
+
 SimpleIIRFilter* rlms_init(void);
 NUM rlms_func(SimpleIIRFilter*, NUM, NUM, NUM* err, NUM* out);
 

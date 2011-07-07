@@ -1,7 +1,8 @@
 #include "rnlms.h"
 
-#define SIGMA 0.01 // корень из сигмы, несовсем понятно в какую сторону его крутить
+#define SIGMA 1 // корень из сигмы, несовсем понятно в какую сторону его крутить
 #define BETTA 100
+
 
 NUM MIN(NUM a, NUM b)
 {
@@ -90,9 +91,9 @@ NUM rlms_func(SimpleIIRFilter *f, NUM far, NUM near, NUM *err, NUM *output)
 	{
 		NUM tmp = (NUM_abs(*err)/sqrt(norma));
 		if (tmp < SIGMA)
-             		f->coeff[i] += (*err)*(f->sig[i]/(BETTA+norma)); 
+             		f->coeff[i] += (*err)*(f->sig[i]/(BETTA+norma));
 		else
-			f->coeff[i] += SIGMA*SIGN(*err)*(f->coeff[i]/(BETTA+norma));
+			f->coeff[i] += SIGMA*SIGN(*err)*(f->coeff[i]/sqrt(BETTA+norma));
 		
 	}
 //	printf("\n");
