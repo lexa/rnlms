@@ -92,7 +92,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 int  main()
 {
 	void *filterStruct = malloc(rlms_sizeOfRequiredMemory(FILTER_LEN));
-	rlms_init(filterStruct, 100, 0.1, 0.999, FILTER_LEN);
+	rlms_init(filterStruct, 100, 0.1f, 0.999f, FILTER_LEN);
 
 	testAlgo(rlms_func, filterStruct,       \
 		 "g165/filtered_noise_10.dat", \

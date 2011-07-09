@@ -2,12 +2,15 @@
 #define _GLOBAL_H_
 
 #include <stdlib.h>
-typedef double NUM;
+typedef float NUM;
 
 
-#define NUM_abs(x) fabs(x)
+#define NUM_abs(x) fabsf(x)
+#define NUM_sqrt(x) sqrtf(x)
+
 
 NUM sqr (NUM n);
+
 
 #endif /* _GLOBAL_H_ */
 

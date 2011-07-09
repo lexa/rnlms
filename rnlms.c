@@ -62,6 +62,8 @@ void* rlms_init(void *mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filte
 	return rez;
 }
 
+//NUM median
+
 NUM filter_output(const SimpleIIRFilter *f)
 {
 	/* NUM rez=0.0; */
@@ -117,7 +119,7 @@ NUM rlms_func(void *f_, NUM far, NUM near, NUM *err, NUM *output)
 
 	fprintf(stderr, "%g\n", f->DELTA);
 
-	if ((NUM_abs(*err)/sqrt(f->norma)) < f->DELTA) 
+	if ((NUM_abs(*err)/NUM_sqrt(f->norma)) < f->DELTA) 
 	{
 		NUM tmp = f->BETTA+f->norma;
 		for (size_t i =0; i<f->len; ++i)
@@ -127,7 +129,7 @@ NUM rlms_func(void *f_, NUM far, NUM near, NUM *err, NUM *output)
 			
 		}
 	} else {
-		NUM tmp = sqrt(f->BETTA + f->norma) * SIGN(*err);
+		NUM tmp = NUM_sqrt(f->BETTA + f->norma) * SIGN(*err);
 		for (size_t i =0; i<f->len; ++i)
 		{
 			NUM x_i = CB_get_elem(f->sig, i);
