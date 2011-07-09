@@ -12,14 +12,12 @@
 
 typedef NUM (*FunctionOfTwoArgs)(void* pFilter, NUM, NUM, NUM*, NUM*);
 
-void testBlock(FunctionOfTwoArgs func, void  *filterStruct, const NUM *far, const NUM *near, NUM *err, NUM* output, int arrayLen)
+void testBlock(FunctionOfTwoArgs func, void  *filterStruct, const NUM *far, const NUM *near, NUM *err, NUM* output, size_t arrayLen)
 {
-	int i=0;
-	for (; i< arrayLen; ++i, ++far, ++near, ++err, ++output)
+	size_t i=0;
+	for (; i< arrayLen; ++i)
 	{
-		NUM far_ = *far;
-		NUM near_ = *near;
-		func(filterStruct, far_, near_, err, output);
+		func(filterStruct, far[i], near[i], &err[i], &output[i]);
 	}
 }
 
@@ -68,7 +66,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 		}
 		testBlock(func, filterStruct, far, near, err, output, readedNums);
 		//сохраняет обработанные данные
-		int writedNums=0;
+		size_t writedNums=0;
 		for(; writedNums < readedNums; ++writedNums)
 		{
 			/* fwrite((void*)&err[writedNums], sizeof(NUM), 1, err_file); */
@@ -76,8 +74,8 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 
 			int16_t e_, o_;
 			e_ = err[writedNums];
-			o_ = output[writedNums];
-//			printf("%d %d %g %g\n", e_, o_, err[writedNums], output[writedNums]);
+			o_ = output[writedNums]; //FIXME round
+			printf("%d %d %g %g\n", e_, o_, err[writedNums], output[writedNums]);
 			fwrite(&e_, sizeof(int16_t), 1, err_file);
 			fwrite(&o_, sizeof(int16_t), 1, output_file);
 		}
@@ -94,7 +92,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 int  main()
 {
 	void *filterStruct = malloc(rlms_sizeOfRequiredMemory(FILTER_LEN));
-	rlms_init(filterStruct, 100, 0.1, FILTER_LEN);
+	rlms_init(filterStruct, 100, 0.1, 0.999, FILTER_LEN);
 
 	testAlgo(rlms_func, filterStruct,       \
 		 "g165/filtered_noise_10.dat", \
@@ -103,3 +101,4 @@ int  main()
 		 "output.dat"
 		);
 }
+ 

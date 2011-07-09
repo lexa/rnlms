@@ -1,12 +1,14 @@
 #include "rnlms.h"
 
+//#define MEMORY_FACTOR 0.999
 
 //структура не должна торчать наружу
 typedef struct 
 {
 	NUM BETTA;
-	NUM SIGMA;
+	NUM DELTA;
 	NUM norma;
+	NUM MEMORY_FACTOR;
 	size_t len;
 //	NUM *sig;
 	CB* sig; //надо инициализировать самому
@@ -38,19 +40,20 @@ size_t rlms_sizeOfRequiredMemory(size_t filter_len)
 }
 
 //инициализирует структуру для фильтра, по уже выделенной памяти
-void* rlms_init(void *mem, NUM BETTA, NUM SIGMA, size_t filter_len)
+void* rlms_init(void *mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len)
 {
 	SimpleIIRFilter *rez = mem;
 	rez->len = filter_len;
 	rez->BETTA = BETTA;
-	rez->SIGMA = SIGMA;
+	rez->DELTA = DELTA;
 	rez->norma = 0.0;
+	rez->MEMORY_FACTOR = MEMORY_FACTOR;
 	// rez->coeff этоflexible array member
 	
 	rez->sig = CB_init(&rez->coeff[rez->len], rez->len);
 
 
-	int i = 0;
+	size_t i = 0;
 	for (; i<rez->len; ++i)
 	{
 		rez->coeff[i] = 0.0;
@@ -78,11 +81,11 @@ NUM filter_output(const SimpleIIRFilter *f)
 NUM calc_norma (const NUM *A, size_t len)
 {
 	NUM tmp = 0.0;
-	int i = 0;
-//	const NUM *p = A;//указатель на A[i]
+	size_t i = 0;
+
 	for (; i < len; ++i)
 	{
-		tmp += A[i] * A[i];
+		tmp += sqr(A[i]);
 	}
 //	return sqrt(tmp);
 	return tmp;
@@ -112,7 +115,9 @@ NUM rlms_func(void *f_, NUM far, NUM near, NUM *err, NUM *output)
 	*output = filter_output(f); 
 	*err = near - *output;
 
-	if ((NUM_abs(*err)/sqrt(f->norma)) < f->SIGMA) 
+	fprintf(stderr, "%g\n", f->DELTA);
+
+	if ((NUM_abs(*err)/sqrt(f->norma)) < f->DELTA) 
 	{
 		NUM tmp = f->BETTA+f->norma;
 		for (size_t i =0; i<f->len; ++i)
@@ -126,10 +131,13 @@ NUM rlms_func(void *f_, NUM far, NUM near, NUM *err, NUM *output)
 		for (size_t i =0; i<f->len; ++i)
 		{
 			NUM x_i = CB_get_elem(f->sig, i);
-			f->coeff[i] += f->SIGMA*(x_i/tmp);
+			f->coeff[i] += f->DELTA*(x_i/tmp);
 			
 		}
 	}
+	f->DELTA = f->MEMORY_FACTOR * f->DELTA + (1-f->MEMORY_FACTOR) * MIN(sqr(*err)/(f->norma), f->DELTA);
+
+
 //	printf("\n");
 	/* printf("%g %g %g\n", f->coeff[0], f->coeff[f->len/2], f->coeff[f->len-1]); */
 	/* printf("%g %g %g\n", f->sig[0], f->sig[f->len/2], f->sig[f->len-1]); */
