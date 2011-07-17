@@ -27,8 +27,9 @@ CB_calc_pos(const CB * const buf, size_t pos)
 NUM
 convolution_CB_and_CB(const CB * const buf0, const CB * const buf1)
 {
-	if (buf0->len != buf1->len)
-		assert ("convolution_CB_and_CB: sizes of buffers must be the same");
+//	if (buf0->len != buf1->len)
+//		assert ("convolution_CB_and_CB: sizes of buffers must be the same");
+	assert(buf0->len != buf1->len);
 	size_t i=0;
 	NUM rez = 0.0;
 	for (; i<buf0->len; ++i)
@@ -66,8 +67,9 @@ convolution_CB_and_vector(const CB * const buf, const NUM * const vec)
 
 size_t CB_size(size_t len)
 {
+	NUM s[1];
 	return sizeof(CB) + \
-		sizeof(NUM[len]);
+		sizeof(s[0]);
 }
 
 
@@ -78,7 +80,8 @@ CB_init(void* mem, size_t len)
 	buf->len = len;
 	buf->begin = 0;
 	
-	for (size_t i = 0; i<buf->len; ++i)
+	size_t i;
+	for ( i = 0; i<buf->len; ++i)
 	{
 		buf->data[i] = 0.0;
 	}

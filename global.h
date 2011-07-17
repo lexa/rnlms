@@ -2,8 +2,9 @@
 #define _GLOBAL_H_
 
 #include <stdlib.h>
-typedef float NUM;
+//typedef float NUM;
 
+#define NUM float
 
 #define NUM_abs(x) fabsf(x)
 #define NUM_sqrt(x) sqrtf(x)

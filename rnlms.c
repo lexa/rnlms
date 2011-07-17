@@ -35,7 +35,7 @@ NUM SIGN(NUM a)
 size_t rlms_sizeOfRequiredMemory(size_t filter_len)
 {
 	return sizeof(SimpleIIRFilter) +	\
-		(sizeof(NUM[filter_len])) +	\
+		(sizeof(NUM)) +	\
 		(CB_size(filter_len)) ;
 }
 
@@ -96,7 +96,8 @@ NUM calc_norma (const NUM *A, size_t len)
 
 void insert_right(NUM *arr, NUM val, size_t len)
 {
-	for (size_t i = len-1; i > 0; --i)
+	size_t i;
+	for (i = len-1; i > 0; --i)
 	{
 		arr[i] = arr[i-1];
 	}
@@ -105,24 +106,25 @@ void insert_right(NUM *arr, NUM val, size_t len)
 
 
 //выполняет для адаптацию
-NUM rlms_func(void *f_, NUM far, NUM near, NUM *err, NUM *output)
+NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 {
 	SimpleIIRFilter *f = f_;
 
 //	NUM norma = convolution_CB_and_CB(f->sig, f->sig); 
-	f->norma += sqr(far) - sqr(CB_get_elem(f->sig, f->len)) ;  
+	f->norma += sqr(far_) - sqr(CB_get_elem(f->sig, f->len)) ;
 
-	CB_push_elem(f->sig, far);
+	CB_push_elem(f->sig, far_);
 
 	*output = filter_output(f); 
-	*err = near - *output;
+	*err = near_ - *output;
 
 	fprintf(stderr, "%g\n", f->DELTA);
 
 	if ((NUM_abs(*err)/NUM_sqrt(f->norma)) < f->DELTA) 
 	{
 		NUM tmp = f->BETTA+f->norma;
-		for (size_t i =0; i<f->len; ++i)
+		size_t i;
+		for (i =0; i<f->len; ++i)
 		{
 			NUM x_i = CB_get_elem(f->sig, i);
              		f->coeff[i] += (*err)*(x_i/tmp);
@@ -130,7 +132,8 @@ NUM rlms_func(void *f_, NUM far, NUM near, NUM *err, NUM *output)
 		}
 	} else {
 		NUM tmp = NUM_sqrt(f->BETTA + f->norma) * SIGN(*err);
-		for (size_t i =0; i<f->len; ++i)
+		size_t i;
+		for (i =0; i<f->len; ++i)
 		{
 			NUM x_i = CB_get_elem(f->sig, i);
 			f->coeff[i] += f->DELTA*(x_i/tmp);
