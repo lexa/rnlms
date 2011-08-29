@@ -1,8 +1,8 @@
 #include "rnlms.h"
 
-//#define MEMORY_FACTOR 0.999
+/*#define MEMORY_FACTOR 0.999*/
 
-//структура не должна торчать наружу
+/*структура не должна торчать наружу*/
 typedef struct 
 {
 	NUM BETTA;
@@ -10,8 +10,8 @@ typedef struct
 	NUM norma;
 	NUM MEMORY_FACTOR;
 	size_t len;
-//	NUM *sig;
-	CB* sig; //надо инициализировать самому
+  /*	NUM *sig;*/
+  CB* sig; /*надо инициализировать самому*/
 	NUM coeff[];
 } SimpleIIRFilter ;
 
@@ -39,30 +39,31 @@ size_t rlms_sizeOfRequiredMemory(size_t filter_len)
 		(CB_size(filter_len)) ;
 }
 
-//инициализирует структуру для фильтра, по уже выделенной памяти
+/*инициализирует структуру для фильтра, по уже выделенной памяти*/
 void* rlms_init(void *mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len)
 {
+	size_t i;
 	SimpleIIRFilter *rez = mem;
 	rez->len = filter_len;
 	rez->BETTA = BETTA;
 	rez->DELTA = DELTA;
 	rez->norma = 0.0;
 	rez->MEMORY_FACTOR = MEMORY_FACTOR;
-	// rez->coeff этоflexible array member
+	/* rez->coeff этоflexible array member*/
 	
 	rez->sig = CB_init(&rez->coeff[rez->len], rez->len);
 
 
-	size_t i = 0;
+	i = 0;
 	for (; i<rez->len; ++i)
 	{
 		rez->coeff[i] = 0.0;
-//		rez->sig[i] = 0.0;
+		/*		rez->sig[i] = 0.0;*/
 	}
 	return rez;
 }
 
-//NUM median
+/*NUM median*/
 
 NUM filter_output(const SimpleIIRFilter *f)
 {
@@ -79,7 +80,7 @@ NUM filter_output(const SimpleIIRFilter *f)
 	return convolution_CB_and_vector(f->sig, f->coeff);
 }
 
-//вычисляет X*X'
+/*вычисляет X*X'*/
 NUM calc_norma (const NUM *A, size_t len)
 {
 	NUM tmp = 0.0;
@@ -89,7 +90,7 @@ NUM calc_norma (const NUM *A, size_t len)
 	{
 		tmp += sqr(A[i]);
 	}
-//	return sqrt(tmp);
+	/*	return sqrt(tmp);*/
 	return tmp;
 }
 
@@ -105,12 +106,12 @@ void insert_right(NUM *arr, NUM val, size_t len)
 }
 
 
-//выполняет для адаптацию
+/*выполняет для адаптацию*/
 NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 {
 	SimpleIIRFilter *f = f_;
 
-//	NUM norma = convolution_CB_and_CB(f->sig, f->sig); 
+	/*	NUM norma = convolution_CB_and_CB(f->sig, f->sig); */
 	f->norma += sqr(far_) - sqr(CB_get_elem(f->sig, f->len)) ;
 
 	CB_push_elem(f->sig, far_);
@@ -143,7 +144,7 @@ NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 	f->DELTA = f->MEMORY_FACTOR * f->DELTA + (1-f->MEMORY_FACTOR) * MIN(sqr(*err)/(f->norma), f->DELTA);
 
 
-//	printf("\n");
+	/*	printf("\n");*/
 	/* printf("%g %g %g\n", f->coeff[0], f->coeff[f->len/2], f->coeff[f->len-1]); */
 	/* printf("%g %g %g\n", f->sig[0], f->sig[f->len/2], f->sig[f->len-1]); */
 	return *err;

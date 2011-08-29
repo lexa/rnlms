@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -std=c99 -O0 -ggdb -Wall -Wextra -Wformat=2 -pedantic -Winit-self -Wstrict-overflow=5 -Wcast-qual -Wcast-align -Wconversion -Waggregate-return
+CFLAGS=-Wall -std=gnu89 -O0 -ggdb -Wall -Wextra -Wformat=2 -pedantic -Winit-self -Wstrict-overflow=5 -Wcast-qual -Wcast-align -Wconversion -Waggregate-return 
 # CFLAGS=-Wall -std=c99 -O0 -ggdb
 OBJS=rnlms.o tester.o  CircularBuffer.o global.o 
 HEAD=global.h rnlms.h CircularBuffer.h

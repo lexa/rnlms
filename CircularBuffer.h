@@ -14,10 +14,13 @@
 #include <assert.h>
 #include "global.h"
 
+/*тк ccs v3.3 не умеет flexible arrays, то пришлось делать костыли*/
+/*#define FLEXIBLE_ARRAY_SIZE 1000*/
+
 typedef struct {
 	size_t len;
-	size_t begin;//begin of ring
-	NUM data[];
+  size_t begin;/*begin of ring*/
+	NUM *data;
 } CB;
 
 

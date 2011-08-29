@@ -2,7 +2,7 @@
 #define _GLOBAL_H_
 
 #include <stdlib.h>
-//typedef float NUM;
+/*typedef float NUM;*/
 
 #define NUM float
 

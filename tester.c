@@ -27,7 +27,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 	      const char *err_filename, 
 	      const char *output_filename)
 {
-//	void *filterStruct = initializer();
+  /*	void *filterStruct = initializer();*/
 	
 	FILE *far__file = NULL,
 		*near__file = NULL,
@@ -49,7 +49,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 	while(!feof(far__file) && !feof(near__file))
 	{
 		size_t readedNums=0;
-		//читает один блок
+		/*читает один блок*/
 		while(!feof(far__file) && !feof(near__file) && readedNums < FRAME_SIZE)
 		{
 			int16_t f_, n_;
@@ -61,11 +61,11 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 			far_[readedNums] = f_;
 			near_[readedNums] = n_;
 			
-//			printf ("%d, %d, %g, %g\n", f_, n_, far_[readedNums], near_[readedNums]);
+			/*			printf ("%d, %d, %g, %g\n", f_, n_, far_[readedNums], near_[readedNums]);*/
 			++readedNums;
 		}
 		testBlock(func, filterStruct, far_, near_, err, output, readedNums);
-		//сохраняет обработанные данные
+		/*сохраняет обработанные данные*/
 		size_t writedNums=0;
 		for(; writedNums < readedNums; ++writedNums)
 		{
@@ -74,7 +74,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 
 			int16_t e_, o_;
 			e_ = err[writedNums];
-			o_ = output[writedNums]; //FIXME round
+			o_ = output[writedNums]; /*FIXME round*/
 			printf("%d %d %g %g\n", e_, o_, err[writedNums], output[writedNums]);
 			fwrite(&e_, sizeof(int16_t), 1, err_file);
 			fwrite(&o_, sizeof(int16_t), 1, output_file);

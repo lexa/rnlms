@@ -21,14 +21,14 @@ CB_calc_pos(const CB * const buf, size_t pos)
 	/* } */
 	/* return tmp; */
 	
-	return (buf->begin + pos + buf->len)%(buf->len); //если длина буфера 2^n то можно тут сэкономить
+  return (buf->begin + pos + buf->len)%(buf->len); /*если длина буфера 2^n то можно тут сэкономить*/
 }
 
 NUM
 convolution_CB_and_CB(const CB * const buf0, const CB * const buf1)
 {
-//	if (buf0->len != buf1->len)
-//		assert ("convolution_CB_and_CB: sizes of buffers must be the same");
+  /*	if (buf0->len != buf1->len)*/
+  /*		assert ("convolution_CB_and_CB: sizes of buffers must be the same");*/
 	assert(buf0->len != buf1->len);
 	size_t i=0;
 	NUM rez = 0.0;
@@ -79,7 +79,7 @@ CB_init(void* mem, size_t len)
 	CB* buf=mem;
 	buf->len = len;
 	buf->begin = 0;
-	buf->data = &(buf->data)+1; //указатель на память после указателя
+	buf->data = &(buf->data)+1; /*указатель на память после указателя*/
 	
 	size_t i;
 	for ( i = 0; i<buf->len; ++i)
