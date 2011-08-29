@@ -119,7 +119,7 @@ NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 	*output = filter_output(f); 
 	*err = near_ - *output;
 
-	fprintf(stderr, "%g\n", f->DELTA);
+	//	fprintf(stderr, "%g\n", f->DELTA);
 
 	if ((NUM_abs(*err)/NUM_sqrt(f->norma)) < f->DELTA) 
 	{
