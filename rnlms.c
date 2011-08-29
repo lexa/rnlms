@@ -35,7 +35,7 @@ NUM SIGN(NUM a)
 size_t rlms_sizeOfRequiredMemory(size_t filter_len)
 {
 	return sizeof(SimpleIIRFilter) +	\
-		(sizeof(NUM)) +	\
+		(sizeof(NUM)*filter_len) +	\
 		(CB_size(filter_len)) ;
 }
 
