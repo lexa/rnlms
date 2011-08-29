@@ -49,9 +49,9 @@ void* rlms_init(void *mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filte
 	rez->DELTA = DELTA;
 	rez->norma = 0.0; 
 	rez->MEMORY_FACTOR = MEMORY_FACTOR;
-	rez->coeff = ((float*)&(rez->coeff))+1;
+	rez->coeff = (float*)(&rez + 1);
 	
-	rez->sig = CB_init(&rez->coeff[rez->len], rez->len);
+	rez->sig = CB_init(&(rez->coeff[rez->len]), rez->len);
 
 
 	i = 0;
@@ -119,7 +119,7 @@ NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 	*output = filter_output(f); 
 	*err = near_ - *output;
 
-	//	fprintf(stderr, "%g\n", f->DELTA);
+	/*	fprintf(stderr, "%g\n", f->DELTA);*/
 
 	if ((NUM_abs(*err)/NUM_sqrt(f->norma)) < f->DELTA) 
 	{
