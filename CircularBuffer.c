@@ -69,7 +69,7 @@ size_t CB_size(size_t len)
 {
 	NUM s[1];
 	return sizeof(CB) + \
-		sizeof(s[0]);
+		sizeof(s[0])*len;
 }
 
 
@@ -79,6 +79,7 @@ CB_init(void* mem, size_t len)
 	CB* buf=mem;
 	buf->len = len;
 	buf->begin = 0;
+	buf->data = &(buf->data)+1; //указатель на память после указателя
 	
 	size_t i;
 	for ( i = 0; i<buf->len; ++i)
