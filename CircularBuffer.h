@@ -18,9 +18,9 @@
 /*#define FLEXIBLE_ARRAY_SIZE 1000*/
 
 typedef struct {
-	size_t len;
+  size_t len;
   size_t begin;/*begin of ring*/
-	NUM *data;
+  NUM *data;
 } CB;
 
 

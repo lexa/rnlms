@@ -12,7 +12,7 @@ typedef struct
 	size_t len;
   /*	NUM *sig;*/
   CB* sig; /*надо инициализировать самому*/
-	NUM coeff[];
+	NUM *coeff;
 } SimpleIIRFilter ;
 
 
@@ -49,7 +49,7 @@ void* rlms_init(void *mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filte
 	rez->DELTA = DELTA;
 	rez->norma = 0.0;
 	rez->MEMORY_FACTOR = MEMORY_FACTOR;
-	/* rez->coeff этоflexible array member*/
+	rez->coeff = &(rez->coeff)+1;
 	
 	rez->sig = CB_init(&rez->coeff[rez->len], rez->len);
 
