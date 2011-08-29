@@ -100,5 +100,6 @@ int  main()
 		 "error.dat", \
 		 "output.dat"
 		);
+	return (EXIT_SUCCESS);
 }
  

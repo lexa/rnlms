@@ -5,14 +5,14 @@
 /*структура не должна торчать наружу*/
 typedef struct 
 {
-	NUM BETTA;
-	NUM DELTA;
-	NUM norma;
-	NUM MEMORY_FACTOR;
-	size_t len;
+  NUM BETTA;
+  NUM DELTA;
+  NUM norma;
+  NUM MEMORY_FACTOR;
+  size_t len;
   /*	NUM *sig;*/
-  CB* sig; /*надо инициализировать самому*/
-	NUM *coeff;
+  CB* sig; /*после инициализации кольцевой буффер лежит после коэффициентов*/
+  NUM *coeff;
 } SimpleIIRFilter ;
 
 
