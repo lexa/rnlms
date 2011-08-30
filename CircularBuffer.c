@@ -80,8 +80,9 @@ CB_init(void* mem, size_t len)
   CB* buf=mem;
   buf->len = len;
   buf->begin = 0;
-  buf->data = (float*)(buf+1); /*указатель на память после структуры*/
-  
+  buf->data = (NUM*)(buf+1); /*указатель на память после структуры*/
+  memset(buf->data, 0, sizeof(NUM)*buf->len);
+
   
   for ( i = 0; i<buf->len; ++i)
     {
@@ -102,5 +103,4 @@ CB_get_elem(const CB * const buf, size_t pos)
 {
   return buf->data[CB_calc_pos(buf, pos)];
 }
-
 

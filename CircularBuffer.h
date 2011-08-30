@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 #include "global.h"
 
 /*тк ccs v3.3 не умеет flexible arrays, то пришлось делать костыли*/
