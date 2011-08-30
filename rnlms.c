@@ -49,7 +49,7 @@ void* rlms_init(void *mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filte
 	rez->DELTA = DELTA;
 	rez->norma = 0.0; 
 	rez->MEMORY_FACTOR = MEMORY_FACTOR;
-	rez->coeff = (float*)(&rez + 1);
+	rez->coeff = (float*)(rez + 1);
 	
 	rez->sig = CB_init(&(rez->coeff[rez->len]), rez->len);
 

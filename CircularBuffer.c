@@ -80,7 +80,7 @@ CB_init(void* mem, size_t len)
   CB* buf=mem;
   buf->len = len;
   buf->begin = 0;
-  buf->data = (float*)(&buf+1); /*указатель на память после структуры*/
+  buf->data = (float*)(buf+1); /*указатель на память после структуры*/
   
   
   for ( i = 0; i<buf->len; ++i)
