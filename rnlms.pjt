@@ -11,6 +11,14 @@ Tool="Linker"
 Config="Debug"
 Config="Release"
 
+[Source Files]
+Source="..\..\C6000\cgtools\lib\rts6700.lib"
+Source="CircularBuffer.c"
+Source="global.c"
+Source="rnlms.c"
+Source="tester.c"
+Source="rnlms.cmd"
+
 ["Compiler" Settings: "Debug"]
 Options=-g -fr"$(Proj_dir)\Debug" -d"_DEBUG" -mv6700
 
@@ -22,4 +30,10 @@ Options=-c -m".\Debug\rnlms.map" -o".\Debug\rnlms.out" -w -x
 
 ["Linker" Settings: "Release"]
 Options=-c -m".\Release\rnlms.map" -o".\Release\rnlms.out" -w -x
+
+["rnlms.cmd" Settings: "Debug"]
+LinkOrder=1
+
+["rnlms.cmd" Settings: "Release"]
+LinkOrder=1
 

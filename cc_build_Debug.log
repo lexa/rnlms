@@ -1,25 +1,7 @@
 -----------------------------  rnlms.pjt - Debug  -----------------------------
-[CircularBuffer.c] "C:\CCStudio_v3.3\C6000\cgtools\bin\cl6x" -g -fr"C:/CCStudio_v3.3/MyProjects/rnlms/Debug" -d"_DEBUG" -mv6700 -@"Debug.lkf" "CircularBuffer.c"
-"CircularBuffer.h", line 20: warning: incomplete type is not allowed
-"CircularBuffer.c", line 33: error: declaration may not appear after executable statement in block
-"CircularBuffer.c", line 34: error: declaration may not appear after executable statement in block
-"CircularBuffer.c", line 83: error: declaration may not appear after executable statement in block
-3 errors detected in the compilation of "CircularBuffer.c".
-
->> Compilation failure
-
-[global.c] "C:\CCStudio_v3.3\C6000\cgtools\bin\cl6x" -g -fr"C:/CCStudio_v3.3/MyProjects/rnlms/Debug" -d"_DEBUG" -mv6700 -@"Debug.lkf" "global.c"
-
 [rnlms.c] "C:\CCStudio_v3.3\C6000\cgtools\bin\cl6x" -g -fr"C:/CCStudio_v3.3/MyProjects/rnlms/Debug" -d"_DEBUG" -mv6700 -@"Debug.lkf" "rnlms.c"
-"CircularBuffer.h", line 20: warning: incomplete type is not allowed
-"rnlms.c", line 15: warning: incomplete type is not allowed
-"rnlms.c", line 56: error: declaration may not appear after executable statement in block
-1 error detected in the compilation of "rnlms.c".
-
->> Compilation failure
 
 [tester.c] "C:\CCStudio_v3.3\C6000\cgtools\bin\cl6x" -g -fr"C:/CCStudio_v3.3/MyProjects/rnlms/Debug" -d"_DEBUG" -mv6700 -@"Debug.lkf" "tester.c"
-"CircularBuffer.h", line 20: warning: incomplete type is not allowed
 "tester.c", line 44: error: declaration may not appear after executable statement in block
 "tester.c", line 45: error: declaration may not appear after executable statement in block
 "tester.c", line 46: error: declaration may not appear after executable statement in block
@@ -30,4 +12,4 @@
 >> Compilation failure
 
 Build Complete,
-  9 Errors, 4 Warnings, 0 Remarks.
+  5 Errors, 0 Warnings, 0 Remarks.
