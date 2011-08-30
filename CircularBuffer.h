@@ -33,6 +33,6 @@ NUM convolution_CB_and_CB(const CB * const buf0, const CB * const buf1);
 
 void CB_push_elem(CB * const buf, NUM elem);
 NUM CB_get_elem(const CB * const buf, size_t pos);
-
+NUM CB_get_first_elem(const CB * const buf);
 
 #endif /* CIRCULARBUFFER_H_ */

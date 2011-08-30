@@ -11,6 +11,7 @@
 size_t
 CB_calc_pos(const CB * const buf, size_t pos)
 {
+  /*если длина буфера 2^n то можно тут сэкономить*/
 
   /* этот вариант может сгодится если мы не любим делить */
   /* size_t tmp = buf->begin + pos; */
@@ -21,7 +22,15 @@ CB_calc_pos(const CB * const buf, size_t pos)
   /* } */
   /* return tmp; */
 	
-  return (buf->begin + pos + buf->len)%(buf->len); /*если длина буфера 2^n то можно тут сэкономить*/
+  /* более надёжный вариант */
+  /*return (buf->begin + pos + buf->len)%(buf->len); */
+
+  /* более быстрый но требует чтобы pos <= buf->len*/
+#ifdef DEBUG_PROGRAM
+  assert(pos < buf->len);
+#endif
+  size_t position_in_array = buf->begin + pos;
+  return (position_in_array >= buf->len)?(position_in_array - buf->len):position_in_array;
 }
 
 NUM
@@ -104,3 +113,8 @@ CB_get_elem(const CB * const buf, size_t pos)
   return buf->data[CB_calc_pos(buf, pos)];
 }
 
+NUM
+CB_get_first_elem(const CB * const buf)
+{
+  return buf->data[buf->begin];
+}

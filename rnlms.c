@@ -10,7 +10,6 @@ typedef struct
   NUM norma;
   NUM MEMORY_FACTOR;
   size_t len;
-  NUM output;
   /*	NUM *sig;*/
   CB* sig; /*после инициализации кольцевой буффер лежит после коэффициентов*/
   NUM *coeff;
@@ -51,7 +50,6 @@ void* rlms_init(void *mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filte
 	rez->DELTA = DELTA;
 	rez->norma = 0.0; 
 	rez->MEMORY_FACTOR = MEMORY_FACTOR;
-	rez->output = 0.0;
 	rez->coeff = (NUM*)(rez + 1);
 	memset(rez->coeff, 0, sizeof(NUM)*filter_len);
 	
@@ -118,13 +116,14 @@ NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 	SimpleIIRFilter *f = f_;
 
 	/*	NUM norma = convolution_CB_and_CB(f->sig, f->sig); */
-	f->norma += sqr(far_) - sqr(CB_get_elem(f->sig, f->len)) ;
+	f->norma += sqr(far_) - sqr(CB_get_first_elem(f->sig)) ;
 
-	
-	//f->output += (far_ * f->coeff[f->len-1])  - (CB_get_elem(f->sig, 0) * f->coeff[0]) ;
+	/* fprintf(stderr, "%g | %g\n", CB_get_first_elem(f->sig), CB_get_elem(f->sig, f->sig->len)); */
+	/* assert (CB_get_first_elem(f->sig) == CB_get_elem(f->sig, f->sig->len)); */
+
 	CB_push_elem(f->sig, far_);
 
-	f->output = filter_output(f);  
+
 
 	*output = filter_output(f);
 	*err = near_ - *output;
