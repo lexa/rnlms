@@ -41,12 +41,31 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 		*err_file = NULL,
 		*output_file = NULL;
 	
-	far__file = fopen(far__filename, "r");
-	near__file = fopen(near__filename, "r");
-	err_file = fopen(err_filename, "w");
-	output_file = fopen(output_filename, "w");
+	if (NULL == (far__file = fopen(far__filename, "r")))
+	  {
+	    fprintf(stderr, "can't open file"); return();
+	  }
 
+	if (NULL == (near__file = fopen(near__filename, "r")))
+	  {
+	    fclose(far__filename);
+	    fprintf(stderr, "can't open file"); return();
+	  }
 
+	if (NULL == (err_file = fopen(err_filename, "w")))
+	  {
+	    fclose(far__filename);
+	    fclose(near__filename);
+	    fprintf(stderr, "can't open file"); return();
+	  }
+	if (NULL == (output_file = fopen(output_filename, "w")))
+	  {
+	    fclose(far__filename);
+	    fclose(near__filename);
+	    fclose(err_filename);
+	    fprintf(stderr, "can't open file"); return();
+	  }
+	
 	
 
 	while(!feof(far__file) && !feof(near__file))
@@ -82,7 +101,6 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 		}
 	}
 
-	free(filterStruct);
 	fclose(far__file);
 	fclose(near__file);
 	fclose(err_file);
@@ -101,6 +119,7 @@ int  main()
 		 "error.dat", \
 		 "output.dat"
 		);
+	free(filterStruct);
 	return (EXIT_SUCCESS);
 }
  
