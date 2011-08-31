@@ -43,27 +43,27 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 	
 	if (NULL == (far__file = fopen(far__filename, "r")))
 	  {
-	    fprintf(stderr, "can't open file"); return();
+	    fprintf(stderr, "can't open file"); return;
 	  }
 
 	if (NULL == (near__file = fopen(near__filename, "r")))
 	  {
-	    fclose(far__filename);
-	    fprintf(stderr, "can't open file"); return();
+	    fclose(far__file);
+	    fprintf(stderr, "can't open file"); return;
 	  }
 
 	if (NULL == (err_file = fopen(err_filename, "w")))
 	  {
-	    fclose(far__filename);
-	    fclose(near__filename);
-	    fprintf(stderr, "can't open file"); return();
+	    fclose(far__file);
+	    fclose(near__file);
+	    fprintf(stderr, "can't open file"); return;
 	  }
 	if (NULL == (output_file = fopen(output_filename, "w")))
 	  {
-	    fclose(far__filename);
-	    fclose(near__filename);
-	    fclose(err_filename);
-	    fprintf(stderr, "can't open file"); return();
+	    fclose(far__file);
+	    fclose(near__file);
+	    fclose(err_file);
+	    fprintf(stderr, "can't open file"); return;
 	  }
 	
 	
