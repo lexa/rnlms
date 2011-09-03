@@ -79,9 +79,8 @@ NUM filter_output(const SimpleIIRFilter *f)
 	/* 	rez += f->coeff[i] * f->sig[i]; */
 	/* } */
 	
-//  return convolution_CB_and_vector(f->sig, f->coeff);
-  return 0.0;
-  
+  return convolution_CB_and_vector(f->sig, f->coeff);
+ 
 }
 
 /*вычисляет X*X'*/
