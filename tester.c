@@ -43,27 +43,27 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 	
 	if (NULL == (far__file = fopen(far__filename, "r")))
 	  {
-	    fprintf(stderr, "can't open file"); return;
+	    fprintf(stderr, "can't open file\n"); return;
 	  }
 
 	if (NULL == (near__file = fopen(near__filename, "r")))
 	  {
 	    fclose(far__file);
-	    fprintf(stderr, "can't open file"); return;
+	    fprintf(stderr, "can't open file\n"); return;
 	  }
 
 	if (NULL == (err_file = fopen(err_filename, "w")))
 	  {
 	    fclose(far__file);
 	    fclose(near__file);
-	    fprintf(stderr, "can't open file"); return;
+	    fprintf(stderr, "can't open file\n"); return;
 	  }
 	if (NULL == (output_file = fopen(output_filename, "w")))
 	  {
 	    fclose(far__file);
 	    fclose(near__file);
 	    fclose(err_file);
-	    fprintf(stderr, "can't open file"); return;
+	    fprintf(stderr, "can't open file\n"); return;
 	  }
 	
 	
@@ -107,10 +107,12 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 	fclose(output_file);
 }
 
+char filterStruct[1000];
 
 int  main()
 {
-	void *filterStruct = malloc(rlms_sizeOfRequiredMemory(FILTER_LEN));
+//	void *filterStruct = malloc(rlms_sizeOfRequiredMemory(FILTER_LEN));
+
 	rlms_init(filterStruct, 100, 0.1f, 0.999f, FILTER_LEN);
 
 	testAlgo(rlms_func, filterStruct,       \
@@ -119,7 +121,7 @@ int  main()
 		 "error.dat", \
 		 "output.dat"
 		);
-	free(filterStruct);
+//	free(filterStruct);
 	return (EXIT_SUCCESS);
 }
  

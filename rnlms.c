@@ -123,7 +123,8 @@ NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 	CB_push_elem(f->sig, far_);
 
 
-	*output = filter_output(f);
+//	*output = filter_output(f);
+	*output = convolution_CB_and_vector(f->sig, f->coeff);
 	*err = near_ - *output;
 
 	/*	fprintf(stderr, "%g\n", f->DELTA);*/
