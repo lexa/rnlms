@@ -27,4 +27,5 @@ SECTIONS
         .stack   > IRAM
         .cio     > IRAM
         .sysmem  > IRAM
+		.switch  > IRAM
 }
