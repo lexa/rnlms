@@ -79,8 +79,8 @@ NUM filter_output(const SimpleIIRFilter *f)
 	/* 	rez += f->coeff[i] * f->sig[i]; */
 	/* } */
 	
-  return convolution_CB_and_vector(f->sig, f->coeff);
-  
+//  return convolution_CB_and_vector(f->sig, f->coeff);
+  return 0.0;
   
 }
 
@@ -122,7 +122,6 @@ NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 	/* assert (CB_get_first_elem(f->sig) == CB_get_elem(f->sig, f->sig->len)); */
 
 	CB_push_elem(f->sig, far_);
-
 
 
 	*output = filter_output(f);
