@@ -114,8 +114,8 @@ int  main()
 	rlms_init(filterStruct, 100, 0.1f, 0.999f, FILTER_LEN);
 
 	testAlgo(rlms_func, filterStruct,       \
-		 "g165/filtered_noise_10.dat", \
-		 "g165/echo_10_128.dat", \
+		 "g165/filtered_noise_10_small.dat", \
+		 "g165/echo_10_128_small.dat", \
 		 "error.dat", \
 		 "output.dat"
 		);

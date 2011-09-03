@@ -8,3 +8,5 @@
 /main
 /output.dat
 /callgrind.out.*
+/Debug/error.dat
+/Debug/output.dat
