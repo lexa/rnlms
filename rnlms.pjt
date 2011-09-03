@@ -26,7 +26,7 @@ Options=-g -fr"$(Proj_dir)\Debug" -d"_DEBUG" -mv6700
 Options=-o3 -fr"$(Proj_dir)\Release" -mv6700
 
 ["Linker" Settings: "Debug"]
-Options=-c -m".\Debug\rnlms.map" -o".\Debug\rnlms.out" -w -x
+Options=-c -heap600 -m".\Debug\rnlms.map" -o".\Debug\rnlms.out" -stack600 -w -x
 
 ["Linker" Settings: "Release"]
 Options=-c -m".\Release\rnlms.map" -o".\Release\rnlms.out" -w -x
