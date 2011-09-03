@@ -19,5 +19,11 @@ $(OBJS): %.o: %.c %.h Makefile
 main: $(HEAD) $(OBJS)
 		$(CC) $(OBJS) $(CFLAGS) -o main -lm
 
+.PHONY: test
+test:
+		bash -c "cd Debug; ../main | awk 'BEGIN {print \"plot \\\"-\\\" with lines \"} {print \$$1} END{print  \"e\npause mouse keypress \\\"Hit return to continue\\\" \"} ' | gnuplot ; "
+
+
+.PHONY: clean
 clean:
 		rm -f *.o main
