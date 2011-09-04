@@ -40,8 +40,10 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 		*near__file = NULL,
 		*err_file = NULL,
 		*output_file = NULL;
-	
-	if (NULL == (far__file = fopen(far__filename, "r")))
+
+	far__file = fopen(far__filename, "r");
+
+	if (NULL == far__file)
 	  {
 	    fprintf(stderr, "can't open file\n"); return;
 	  }
@@ -107,11 +109,12 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 	fclose(output_file);
 }
 
-char filterStruct[1000];
+char filterStruct[10000];
 
-int  main()
+int main()
 {
 //	void *filterStruct = malloc(rlms_sizeOfRequiredMemory(FILTER_LEN));
+
 
 	rlms_init(filterStruct, 100, 0.1f, 0.999f, FILTER_LEN);
 
