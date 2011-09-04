@@ -17,21 +17,6 @@ typedef struct
 } SimpleIIRFilter ;
 
 
-NUM MIN(NUM a, NUM b)
-{
-	if (a<b)
-		return a;
-	else
-		return b;
-}
-
-NUM SIGN(NUM a)
-{
-	if (a > 0)
-		return 1.0;
-	else 
-		return -1.0;
-}
 
 size_t rlms_sizeOfRequiredMemory(size_t filter_len)
 {
@@ -123,7 +108,7 @@ NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 	CB_push_elem(f->sig, far_);
 
 
-//	*output = filter_output(f);
+	/* *output = filter_output(f); */
 	*output = convolution_CB_and_vector(f->sig, f->coeff);
 	*err = near_ - *output;
 

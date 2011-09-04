@@ -2,11 +2,14 @@
 #ifndef _RNLMS_H_
 #define _RNLMS_H_
 
-#include "global.h"
-#include "CircularBuffer.h"
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+
+
+#include "global.h"
+#include "utils.h"
+#include "CircularBuffer.h"
 
 /*#define FILTER_LEN 300;*/
 
