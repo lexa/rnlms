@@ -1,8 +1,8 @@
 CC=gcc
 CFLAGS=-Wall -std=gnu89 -O0 -ggdb -Wall -Wextra -Wformat=2 -pedantic -Winit-self -Wstrict-overflow=5 -Wcast-qual -Wcast-align -Wconversion -Waggregate-return 
 # CFLAGS=-Wall -std=c99 -O0 -ggdb
-OBJS=rnlms.o tester.o  CircularBuffer.o global.o 
-HEAD=global.h rnlms.h CircularBuffer.h
+OBJS=rnlms.o tester.o  CircularBuffer.o global.o utils.o
+HEAD=global.h rnlms.h CircularBuffer.h utils.h tester.h
 
 all:main
 
@@ -17,7 +17,7 @@ $(OBJS): %.o: %.c %.h Makefile
 		$(CC) -c $(CFLAGS) $< -o $@
 
 main: $(HEAD) $(OBJS)
-		$(CC) $(OBJS) $(CFLAGS) -o main -lm
+		$(CC) $(OBJS) $(CFLAGS) -o $@ -lm
 
 .PHONY: test
 test:
