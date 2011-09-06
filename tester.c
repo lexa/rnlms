@@ -77,7 +77,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
       convert_from_int16_to_NUM(int16_arr2, near_, readedNums);
 	  
       /* прогоняет данные через тестовый алгоритм */
-//      testBlock(func, filterStruct, far_, near_, err, output, readedNums);
+      testBlock(func, filterStruct, far_, near_, err, output, readedNums);
 	  
       /*сохраняет обработанные данные*/
 
@@ -108,8 +108,8 @@ int main()
   
   
   testAlgo(rlms_func, filterStruct,	       \
-	   "g165/filtered_noise_10_small.dat",       \
-	   "g165/echo_10_128_small.dat",	       \
+	   "g165/filtered_noise_10.dat",       \
+	   "g165/echo_10_128.dat",	       \
 	   "error.dat",			       \
 	   "output.dat"
 	   ); 
@@ -118,4 +118,5 @@ int main()
   printf("extint successfull");
   return (EXIT_SUCCESS);
 }
+ 
  
