@@ -11,5 +11,5 @@
 
 
 #define FRAME_SIZE    80
-#define FILTER_LEN   300
+#define FILTER_LEN   10
 

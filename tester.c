@@ -76,24 +76,23 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
       convert_from_int16_to_NUM(int16_arr1, far_, readedNums);
       convert_from_int16_to_NUM(int16_arr2, near_, readedNums);
 	  
-
       /* прогоняет данные через тестовый алгоритм */
-      testBlock(func, filterStruct, far_, near_, err, output, readedNums);
+//      testBlock(func, filterStruct, far_, near_, err, output, readedNums);
 	  
       /*сохраняет обработанные данные*/
 
       convert_from_NUM_to_int16(err, int16_arr1, readedNums);
       convert_from_NUM_to_int16(output, int16_arr2, readedNums);
 
-      fwrite(&int16_arr1, sizeof(int16_t), readedNums, err_file);
-      fwrite(&int16_arr2, sizeof(int16_t), readedNums, output_file);
+      fwrite(int16_arr1, sizeof(int16_t), readedNums, err_file);
+      fwrite(int16_arr2, sizeof(int16_t), readedNums, output_file);
     }
 	
 	
   fclose(far__file);
   fclose(near__file);
   fclose(err_file);
-  fclose(output_file);
+  fclose(output_file); 
 }
 
 char filterStruct[10000];
@@ -107,13 +106,16 @@ int main()
   
   rlms_init(filterStruct, 100, 0.1f, 0.999f, FILTER_LEN);
   
+  
   testAlgo(rlms_func, filterStruct,	       \
-	   "g165/filtered_noise_10.dat",       \
-	   "g165/echo_10_128.dat",	       \
+	   "g165/filtered_noise_10_small.dat",       \
+	   "g165/echo_10_128_small.dat",	       \
 	   "error.dat",			       \
 	   "output.dat"
-	   );
-  /* free(filterStruct); */
+	   ); 
+
+  /*free(filterStruct); */
+  printf("extint successfull");
   return (EXIT_SUCCESS);
 }
  
