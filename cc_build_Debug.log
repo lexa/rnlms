@@ -1,19 +1,8 @@
 -----------------------------  rnlms.pjt - Debug  -----------------------------
-[CircularBuffer.c] "C:\CCStudio_v3.3\C6000\cgtools\bin\cl6x" -g -fr"C:/CCStudio_v3.3/MyProjects/rnlms/Debug" -d"_DEBUG" -mv6700 -@"Debug.lkf" "CircularBuffer.c"
-
-[rnlms.c] "C:\CCStudio_v3.3\C6000\cgtools\bin\cl6x" -g -fr"C:/CCStudio_v3.3/MyProjects/rnlms/Debug" -d"_DEBUG" -mv6700 -@"Debug.lkf" "rnlms.c"
-
-[tester.c] "C:\CCStudio_v3.3\C6000\cgtools\bin\cl6x" -g -fr"C:/CCStudio_v3.3/MyProjects/rnlms/Debug" -d"_DEBUG" -mv6700 -@"Debug.lkf" "tester.c"
+[utils.c] "C:\CCStudio_v3.3\C6000\cgtools\bin\cl6x" -g -fr"C:/CCStudio_v3.3/MyProjects/rnlms/Debug" -d"_DEBUG" -mv6700 -@"Debug.lkf" "utils.c"
 
 [Linking...] "C:\CCStudio_v3.3\C6000\cgtools\bin\cl6x" -@"Debug.lkf"
 <Linking>
->> warning: creating output section .switch without SECTIONS specification
->> warning: creating .stack section with default size of 400 (hex) words.
-   Use
-            -stack option to change the default size.
->> warning: creating .sysmem section with default size of 400 (hex) words.
-  
-            Use -heap option to change the default size.
 
 Build Complete,
-  0 Errors, 3 Warnings, 0 Remarks.
+  0 Errors, 0 Warnings, 0 Remarks.

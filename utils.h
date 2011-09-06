@@ -1,7 +1,9 @@
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
+#include <stdint.h>
 #include "global.h"
+
 
 #define GENERATE_FUNC_convert_ARR_declaration(srcType, dstType, NAME)\
   void convert_from##_##NAME(srcType srcArr, dstType dstArr, size_t len);
