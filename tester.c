@@ -66,17 +66,17 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
       int16_t int16_arr1[FRAME_SIZE];
       int16_t int16_arr2[FRAME_SIZE];
 	  
-
-		t1 = fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file);
-		t2 = fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file);
-
+      
+      t1 = fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file);
+      t2 = fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file);
+      
       /*читает один блок*/
-/*      readedNums = MIN_size_t(\
-      			   fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file), \
-      			   fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file));  */
-
-		readedNums = MIN_size_t (t1,t2);
-
+      /*      readedNums = MIN_size_t(					\
+	      fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file), \
+	      fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file));  */
+      
+      readedNums = MIN_size_t (t1,t2);
+      
       convert_from_int16_to_NUM(int16_arr1, far_, readedNums);
       convert_from_int16_to_NUM(int16_arr2, near_, readedNums);
 	  
@@ -91,7 +91,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
       fwrite(int16_arr1, sizeof(int16_t), readedNums, err_file);
       fwrite(int16_arr2, sizeof(int16_t), readedNums, output_file);
 
-	  fprintf(stderr, "one block updated %u\n", readedNums);
+      fprintf(stderr, "one block updated %u\n", readedNums);
 	  
     }
 	
@@ -126,5 +126,3 @@ int main()
   printf("extint successfull");
   return (EXIT_SUCCESS);
 }
- 
- 
