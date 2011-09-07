@@ -15,7 +15,6 @@
 
 Ожидаю получить:
 
-<<<<<<< HEAD
 : block #1 readed, size: 80 bytes
 : block #2 readed, size: 80 bytes
 : block #3 readed, size: 80 bytes
@@ -35,9 +34,4 @@
 
 
 Почему ccs считает что файл такой короткий?
-=======
-
-
-
 Почему это не происходит?
->>>>>>> remotes/origin/simple-read-from-file
