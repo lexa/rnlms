@@ -14,6 +14,8 @@ void testAlgo(
     }
 	
 
+  int cnt_blocks=0;
+  long int total_readed_nums=0;
   while(!feof(far__file))
     {
       size_t t1;
@@ -21,12 +23,11 @@ void testAlgo(
      
       t1 = fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file);
 
- 
-      fprintf(stderr, "one block updated %u\n", t1);
-	  
+      total_readed_nums += t1;
+      fprintf(stderr, "block #%d readed, size: %d\n", ++cnt_blocks, t1);
     }
-	
-	
+  
+  fprintf(stderr, "Total readed: %ld\n", total_readed_nums);
   fclose(far__file);
 }
 
