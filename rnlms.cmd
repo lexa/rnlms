@@ -12,7 +12,7 @@
 
 MEMORY 
 {
-   IRAM       : origin = 0x0,         len = 0x10000
+   IRAM       : origin = 0x0,         len = 0x40000
 }
 
 SECTIONS

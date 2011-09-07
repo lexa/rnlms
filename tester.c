@@ -32,8 +32,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
     *err_file = NULL,
     *output_file = NULL;
 
-  
-  
+
   if (NULL == (far__file = fopen(far__filename, "r")))
     {
       fprintf(stderr, "can't open file\n"); return;
@@ -63,15 +62,20 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
   while(!feof(far__file) && !feof(near__file))
     {
 
-      size_t  readedNums;
+      size_t  readedNums, t1, t2;
       int16_t int16_arr1[FRAME_SIZE];
       int16_t int16_arr2[FRAME_SIZE];
 	  
 
+		t1 = fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file);
+		t2 = fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file);
+
       /*читает один блок*/
-      readedNums = MIN_size_t(\
+/*      readedNums = MIN_size_t(\
       			   fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file), \
-      			   fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file));
+      			   fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file));  */
+
+		readedNums = MIN_size_t (t1,t2);
 
       convert_from_int16_to_NUM(int16_arr1, far_, readedNums);
       convert_from_int16_to_NUM(int16_arr2, near_, readedNums);
@@ -86,6 +90,9 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 
       fwrite(int16_arr1, sizeof(int16_t), readedNums, err_file);
       fwrite(int16_arr2, sizeof(int16_t), readedNums, output_file);
+
+	  fprintf(stderr, "one block updated %u\n", readedNums);
+	  
     }
 	
 	
@@ -95,26 +102,27 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
   fclose(output_file); 
 }
 
-char filterStruct[10000];
+//char filterStruct[1000];
 
 int main()
 {
-  /* void *filterStruct = malloc(rlms_sizeOfRequiredMemory(FILTER_LEN)); */
+  void *filterStruct = malloc(rlms_sizeOfRequiredMemory(FILTER_LEN)); 
+  assert(NULL != filterStruct);
   /* fprintf(stderr, "required mem size: %d", rlms_sizeOfRequiredMemory(FILTER_LEN)); */
-  assert(rlms_sizeOfRequiredMemory(FILTER_LEN) < sizeof (filterStruct));
+  //assert(rlms_sizeOfRequiredMemory(FILTER_LEN) < sizeof (filterStruct));
 
   
   rlms_init(filterStruct, 100, 0.1f, 0.999f, FILTER_LEN);
   
   
   testAlgo(rlms_func, filterStruct,	       \
-	   "g165/filtered_noise_10.dat",       \
-	   "g165/echo_10_128.dat",	       \
+	   "g165/filtered_noise_20.dat",       \
+	   "g165/echo_20_128.dat",	       \
 	   "error.dat",			       \
 	   "output.dat"
 	   ); 
 
-  /*free(filterStruct); */
+  free(filterStruct); 
   printf("extint successfull");
   return (EXIT_SUCCESS);
 }
