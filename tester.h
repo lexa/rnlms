@@ -9,5 +9,5 @@
 
 
 #define FRAME_SIZE   400
-#define FILTER_LEN   10
+
 
