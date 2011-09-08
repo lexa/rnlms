@@ -1,35 +1,21 @@
 #+TITLE: Readme
-#+STARTUP: odd
 
-
-Программа читает файл g165/filtered_noise_20.dat кусками по 800 байт(400 2хбайтных чисел) и показывает сколько блоков по 800 байт прочитано. 
-В норме должно быть прочитано 80000 двухбайтных чисел.
+Программа читает файл g165/filtered_noise_20.dat блоками по FRAME_SIZE 2хбайтных чисел и показывает сколько блоков прочитано. 
+В норме должно быть прочитано 160000 байт.
 
 При запуске программы ccs получаю:
 
-:block #1 readed, size: 180
-:Total readed: 180
-:exit successfull
+: block #1 readed, size: 80 bytes
+: block #2 readed, size: 80 bytes
+: block #3 readed, size: 80 bytes
+: block #4 readed, size: 80 bytes
+: block #5 readed, size: 40 bytes
+: Total bytes readed: 360
+: exit successfull
 
 Ожидаю получить:
 
-: block #1 readed, size: 400
-: block #2 readed, size: 400
-: block #3 readed, size: 400
-: ...
-: вывод упущен
-: ...
-: block #193 readed, size: 400
-: block #194 readed, size: 400
-: block #195 readed, size: 400
-: block #196 readed, size: 400
-: block #197 readed, size: 400
-: block #198 readed, size: 400
-: block #199 readed, size: 400
-: block #200 readed, size: 400
-: block #201 readed, size: 0
-: Total readed: 80000
-: exit successfull% 
+
 
 
 Почему это не происходит?

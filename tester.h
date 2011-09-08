@@ -8,6 +8,6 @@
 #include "global.h"
 
 
-#define FRAME_SIZE   400
+#define FRAME_SIZE   40
 
 
