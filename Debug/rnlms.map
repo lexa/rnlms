@@ -1,7 +1,7 @@
 ******************************************************************************
           TMS320C6x COFF Linker PC v6.0.8                      
 ******************************************************************************
->> Linked Wed Sep 07 21:44:33 2011
+>> Linked Wed Sep 07 22:06:28 2011
 
 OUTPUT FILE NAME:   <./Debug/rnlms.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00008000
@@ -123,32 +123,32 @@ section   page    origin      length       input sections
                   00009494    00000008                 : memory.obj (.far)
                   0000949c    00000004                 : fopen.obj (.far)
 
-.const     0    000094a0    00000195     
+.const     0    000094a0    000001a1     
                   000094a0    00000101     rts6700.lib : ctype.obj (.const)
                   000095a1    00000002                 : fputs.obj (.const)
                   000095a3    00000001     --HOLE-- [fill = 0]
-                  000095a4    0000006e     tester.obj (.const)
-                  00009612    00000023     rts6700.lib : _printfi.obj (.const)
+                  000095a4    0000007a     tester.obj (.const)
+                  0000961e    00000023     rts6700.lib : _printfi.obj (.const)
 
-.cinit     0    00009638    00000154     
-                  00009638    0000005c     rts6700.lib : lowlev.obj (.cinit)
-                  00009694    00000004     --HOLE-- [fill = 0]
-                  00009698    0000005c                 : defs.obj (.cinit)
-                  000096f4    00000004     --HOLE-- [fill = 0]
-                  000096f8    0000002c                 : memory.obj (.cinit)
-                  00009724    00000004     --HOLE-- [fill = 0]
-                  00009728    0000002c                 : exit.obj (.cinit)
-                  00009754    00000004     --HOLE-- [fill = 0]
-                  00009758    0000001c                 : _lock.obj (.cinit)
-                  00009774    00000004     --HOLE-- [fill = 0]
-                  00009778    0000000c                 : fopen.obj (.cinit)
-                  00009784    00000008     --HOLE-- [fill = 0]
+.cinit     0    00009648    00000154     
+                  00009648    0000005c     rts6700.lib : lowlev.obj (.cinit)
+                  000096a4    00000004     --HOLE-- [fill = 0]
+                  000096a8    0000005c                 : defs.obj (.cinit)
+                  00009704    00000004     --HOLE-- [fill = 0]
+                  00009708    0000002c                 : memory.obj (.cinit)
+                  00009734    00000004     --HOLE-- [fill = 0]
+                  00009738    0000002c                 : exit.obj (.cinit)
+                  00009764    00000004     --HOLE-- [fill = 0]
+                  00009768    0000001c                 : _lock.obj (.cinit)
+                  00009784    00000004     --HOLE-- [fill = 0]
+                  00009788    0000000c                 : fopen.obj (.cinit)
+                  00009794    00000008     --HOLE-- [fill = 0]
 
-.cio       0    0000978c    00000120     UNINITIALIZED
-                  0000978c    00000120     rts6700.lib : trgmsg.obj (.cio)
+.cio       0    0000979c    00000120     UNINITIALIZED
+                  0000979c    00000120     rts6700.lib : trgmsg.obj (.cio)
 
-.switch    0    000098ac    00000010     
-                  000098ac    00000010     rts6700.lib : frcdivd.obj (.switch)
+.switch    0    000098bc    00000010     
+                  000098bc    00000010     rts6700.lib : frcdivd.obj (.switch)
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
@@ -168,13 +168,13 @@ address    name
 00003e20   _HOSTrename
 00006e20   _HOSTunlink
 000061c0   _HOSTwrite
-0000978c   __CIOBUF_
+0000979c   __CIOBUF_
 00000640   __STACK_SIZE
 000007d0   __SYSMEM_SIZE
 ffffffff   ___binit__
 00000000   ___bss__
 ffffffff   ___c_args__
-00009638   ___cinit__
+00009648   ___cinit__
 00000000   ___data__
 00000000   ___edata__
 00000000   ___end__
@@ -230,7 +230,7 @@ ffffffff   ___pinit__
 000069a0   _fseek
 00006ac0   _lseek
 00005d00   _ltoa
-00004848   _main
+00004850   _main
 00004aa0   _malloc
 00008080   _memccpy
 00003be0   _memcpy
@@ -247,7 +247,7 @@ ffffffff   ___pinit__
 00006d00   _write
 000079e0   _writemsg
 ffffffff   binit
-00009638   cinit
+00009648   cinit
 00000000   edata
 00000000   end
 000082c0   etext
@@ -283,7 +283,7 @@ address    name
 00003e20   _HOSTrename
 00004480   _setvbuf
 000046a0   _testAlgo
-00004848   _main
+00004850   _main
 00004aa0   _malloc
 00004ca0   _open
 00005060   __buff_read
@@ -347,9 +347,9 @@ address    name
 0000948c   __lock
 00009490   __unlock
 000094a0   __ctypes_
-00009638   ___cinit__
-00009638   cinit
-0000978c   __CIOBUF_
+00009648   ___cinit__
+00009648   cinit
+0000979c   __CIOBUF_
 ffffffff   ___binit__
 ffffffff   ___c_args__
 ffffffff   ___pinit__
