@@ -6,10 +6,8 @@
 
 
 #include "global.h"
-#include "rnlms.h"
-#include "utils.h"
 
 
-#define FRAME_SIZE   40
+#define FRAME_SIZE   400
 #define FILTER_LEN   10
 
