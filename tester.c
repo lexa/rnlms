@@ -6,6 +6,8 @@ void testAlgo(
 {
 			
   FILE *far__file = NULL;
+  int cnt_blocks=0;
+  long int total_readed_nums=0;
 
 
   if (NULL == (far__file = fopen(far__filename, "r")))
@@ -14,8 +16,6 @@ void testAlgo(
     }
 	
 
-  int cnt_blocks=0;
-  long int total_readed_nums=0;
   while(!feof(far__file))
     {
       size_t t1;

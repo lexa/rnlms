@@ -13,11 +13,7 @@ Config="Release"
 
 [Source Files]
 Source="..\..\C6000\cgtools\lib\rts6700.lib"
-Source="CircularBuffer.c"
-Source="global.c"
-Source="rnlms.c"
 Source="tester.c"
-Source="utils.c"
 Source="rnlms.cmd"
 
 ["Compiler" Settings: "Debug"]
