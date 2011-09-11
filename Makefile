@@ -3,8 +3,10 @@ CFLAGS=-Wall -std=gnu89 -O0 -ggdb -Wall -Wextra -Wformat=2 -pedantic -Winit-self
 # CFLAGS=-Wall -std=c99 -O0 -ggdb
 OBJS=rnlms.o tester.o  CircularBuffer.o global.o utils.o
 HEAD=global.h rnlms.h CircularBuffer.h utils.h tester.h
+BIN_FILES=$(wildcard g165/*.dat)
+DAT_FILES=$(BIN_FILES=$:.dat=_ccs.dat)
 
-all:main
+all:main bin_to_ccs_dat_converter
 
 # ${OBJS}: *.c *.h Makefile
 # 		$(CC) %.c %.h $(CFLAGS)
@@ -28,7 +30,10 @@ test:
 		bash -c "cd Debug; ../main"
 		gnuplot -e "plot 'Debug/error.dat' binary format='%short' using 1 with lines; pause mouse keypress \"Hit return to continue\";"
 
+bin_to_ccs_dat_converter: bin_to_dat.c
+		$(CC) $(CFLAGS) $< -o $@
+
 
 .PHONY: clean
 clean:
-		rm -f *.o main
+		rm -f *.o main bin_to_ccs_dat_converter

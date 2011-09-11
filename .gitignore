@@ -10,3 +10,4 @@
 /callgrind.out.*
 /Debug/error.dat
 /Debug/output.dat
+/bin_to_ccs_dat_converter
