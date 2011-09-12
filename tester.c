@@ -178,7 +178,7 @@ int main()
   
   
   testAlgo(rlms_func, filterStruct,	       \
-	   "g165/filtered_noise_20.dat",       \
+	   "g165/filtered_noise_10.dat",       \
 	   "g165/echo_10_128.dat",	       \
 	   "error.dat",			       \
 	   "output.dat"

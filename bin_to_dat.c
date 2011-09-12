@@ -14,12 +14,13 @@ int main(int argc, char **argv)
   in = fopen(argv[1], "r");
   out = fopen(argv[2], "w");
 
-  fprintf(out, "1651 1 0 0 0\n");
+  //  fprintf(out, "1651 1 0 0 0\n");
   while (! (feof(in)))
     {
       int16_t tmp;
       fread(&tmp, sizeof(int16_t), 1, in);
-      fprintf(out, "0x%0.8x\n", tmp);
+      //      fprintf(out, "0x%0.8x\n", tmp);
+      fprintf(out, "%d\n", tmp);
     }
   fclose(in);
   fclose(out);
