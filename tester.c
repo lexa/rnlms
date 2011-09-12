@@ -119,11 +119,19 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
     }
 	
 	
+<<<<<<< HEAD
   fclose(far__file);
   fclose(near__file);
   fclose(err_file);
   fclose(output_file);
 }
+=======
+/*   fclose(far__file); */
+/*   fclose(near__file); */
+/*   fclose(err_file); */
+/*   fclose(output_file);  */
+/* } */
+>>>>>>> 98004b0a7adc3c8cad9c0439db5eb7fbfe1c658f
 
 /*
 void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
