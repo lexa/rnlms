@@ -11,5 +11,5 @@
 
 
 #define FRAME_SIZE   256
-#define FILTER_LEN   200
+#define FILTER_LEN   600
 

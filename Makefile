@@ -28,7 +28,7 @@ main: $(HEAD) $(OBJS)
 .PHONY: test
 test:
 		bash -c "cd Debug; ../main"
-		gnuplot -e "plot 'Debug/error.dat' binary format='%short' using 1 with lines; pause mouse keypress \"Hit return to continue\";"
+		gnuplot -e "set terminal x11; plot 'Debug/error.dat' binary format='%short' using 1 with lines; pause mouse keypress \"Hit return to continue\";"
 
 bin_to_ccs_dat_converter: bin_to_dat.c
 		$(CC) $(CFLAGS) $< -o $@

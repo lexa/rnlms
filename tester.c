@@ -73,26 +73,31 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
       
       /*читает один блок*/
 
-      /* if (FRAME_SIZE != (t1 = fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file))) */
-      /* 	  { */
-      /* 	  fprintf(stderr, "warning, readed less then FRAME_SIZE(from far__file)"); */
-      /* 	  } */
+      if (FRAME_SIZE != (t1 = fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file)))
+	{
+	  fprintf(stderr, "warning, readed less then FRAME_SIZE(from far__file)");
+	}
+      
+      if (FRAME_SIZE != (t2 = fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file)))
+	{
+	  fprintf(stderr, "warning, readed less then FRAME_SIZE(from near__file)");
+	}
+      
+      /* for (i=0; i<FRAME_SIZE; i++) */
+      /* 	{ */
+      /* 	  fprintf(stdout, "%d\n", int16_arr1[i]); */
+      /* 	} */
 
-      /* 	  if (FRAME_SIZE != (t2 = fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file))) */
-      /* 	  { */
 
-      /* 	  fprintf(stderr, "warning, readed less then FRAME_SIZE(from near__file)"); */
-      /* 	  } */
-
-
-      for (i=0; i<FRAME_SIZE; i++)
-      	{
-      	  int tmp1, tmp2;
-      	  fscanf(far__file, "%d\n", &tmp1);
-      	  fscanf(near__file, "%d\n", &tmp2);
-      	  int16_arr1[i] = tmp1;
-      	  int16_arr2[i] = tmp2;
-      	}
+      /* for (i=0; i<FRAME_SIZE; i++) */
+      /* 	{ */
+      /* 	  int tmp1, tmp2; */
+      /* 	  fscanf(far__file, "%d", &tmp1); */
+      /* 	  fscanf(near__file, "%d", &tmp2); */
+      /* 	  int16_arr1[i] = tmp1; */
+      /* 	  int16_arr2[i] = tmp2;  */
+      /* 	  printf("%d\n", tmp1); */
+      /* 	} */
       
 
       readedNums = MIN_size_t (t1,t2);
@@ -147,8 +152,8 @@ int main()
   
   
   testAlgo(rlms_func, filterStruct,	       \
-	   "g165/filtered_noise_10.txt",       \
-	   "g165/echo_10_128.txt",	       \
+	   "g165/filtered_noise_30.dat",       \
+	   "g165/echo_30_512.dat",	       \
 	   "error.dat",			       \
 	   "output.dat"
 	   ); 
