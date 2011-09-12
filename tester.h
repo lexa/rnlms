@@ -10,6 +10,6 @@
 #include "utils.h"
 
 
-#define FRAME_SIZE   20
+#define FRAME_SIZE   256
 #define FILTER_LEN   200
 

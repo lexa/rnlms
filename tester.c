@@ -62,7 +62,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 
   while(!feof(far__file) && !feof(near__file))
     {
-		int i;
+//		int i;
       size_t  readedNums=255, t1=255, t2=255;
       int16_t int16_arr1[FRAME_SIZE]={255};
       int16_t int16_arr2[FRAME_SIZE]={255};
@@ -77,7 +77,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 	  if (FRAME_SIZE != (t2 = fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file)))
 	  {
 
-	  fprintf(stderr, "warning, readed less then FRAME_SIZE(from near__file) %d", errno);
+	  fprintf(stderr, "warning, readed less then FRAME_SIZE(from near__file)");
 	  }
 
       
@@ -99,12 +99,12 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
       convert_from_NUM_to_int16(err, int16_arr1, readedNums);
       convert_from_NUM_to_int16(output, int16_arr2, readedNums);
 
-	  for (i=0; i<readedNums; i++)
+/*	  for (i=0; i<readedNums; i++)
 	  {
 	  	fprintf(stderr, "%d\n", int16_arr1[i]);
-	  }
+	  } */
 
-/*      if (fwrite(int16_arr1, sizeof(int16_t), readedNums, err_file) != readedNums)
+      if (fwrite(int16_arr1, sizeof(int16_t), readedNums, err_file) != readedNums)
 	  {
       	fprintf(stderr, "can't write to file\n"); return;
 		}
@@ -112,9 +112,9 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
       if (fwrite(int16_arr2, sizeof(int16_t), readedNums, output_file) != readedNums)
 	  {
       	fprintf(stderr, "can't write to file\n"); return;
-		} */
+		} 
 
-      fprintf(stderr, "one block updated %u\n", readedNums);
+//      fprintf(stderr, "one block updated %u\n", readedNums);
 	  
     }
 	
