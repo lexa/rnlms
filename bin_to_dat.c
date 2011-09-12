@@ -20,7 +20,7 @@ int main(int argc, char **argv)
       int16_t tmp;
       fread(&tmp, sizeof(int16_t), 1, in);
       //      fprintf(out, "0x%0.8x\n", tmp);
-      fprintf(out, "%d\n", tmp);
+      fprintf(out, "%hd\n", tmp);
     }
   fclose(in);
   fclose(out);

@@ -62,12 +62,16 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 
   while(!feof(far__file) && !feof(near__file))
     {
-//		int i;
+      		int i;
       size_t  readedNums=255, t1=255, t2=255;
       int16_t int16_arr1[FRAME_SIZE]={255};
       int16_t int16_arr2[FRAME_SIZE]={255};
 	  
+      /* memset (int16_arr1, 0, FRAME_SIZE * 2); */
+      /* memset (int16_arr2, 0, FRAME_SIZE *  2); */
       
+      
+      /*читает один блок*/
 
       /* if (FRAME_SIZE != (t1 = fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file))) */
       /* 	  { */
@@ -82,18 +86,15 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 
 
       for (i=0; i<FRAME_SIZE; i++)
-	{
-	  fscanf(far__file, "%d\n", int16_arr1[i]);
-	  fscanf(near__file, "%d\n", int16_arr2[i]);
-	}
+      	{
+      	  int tmp1, tmp2;
+      	  fscanf(far__file, "%d\n", &tmp1);
+      	  fscanf(near__file, "%d\n", &tmp2);
+      	  int16_arr1[i] = tmp1;
+      	  int16_arr2[i] = tmp2;
+      	}
       
 
-      
-      /*читает один блок*/
-      /*      readedNums = MIN_size_t(					\
-	      fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file), \
-	      fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file));  */
-      
       readedNums = MIN_size_t (t1,t2);
       
       convert_from_int16_to_NUM(int16_arr1, far_, readedNums);
@@ -103,75 +104,35 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
       testBlock(func, filterStruct, far_, near_, err, output, readedNums);
 	  
       /*сохраняет обработанные данные*/
-
       convert_from_NUM_to_int16(err, int16_arr1, readedNums);
       convert_from_NUM_to_int16(output, int16_arr2, readedNums);
 
-	  for (i=0; i<readedNums; i++)
-	  {
-	  	fprintf(err_file, "%d\n", int16_arr1[i]);
-	  }
+	  /* for (i=0; i<readedNums; i++) */
+	  /* { */
+	  /* 	fprintf(err_file, "%d\n", int16_arr1[i]); */
+	  /* } */
 
-      /* if (fwrite(int16_arr1, sizeof(int16_t), readedNums, err_file) != readedNums) */
-      /* 	  { */
-      /* 	fprintf(stderr, "can't write to file\n"); return; */
-      /* 		} */
+      if (fwrite(int16_arr1, sizeof(int16_t), readedNums, err_file) != readedNums)
+      	{
+      	  fprintf(stderr, "can't write to file\n"); return;
+      	}
 
-      /* if (fwrite(int16_arr2, sizeof(int16_t), readedNums, output_file) != readedNums) */
-      /* 	  { */
-      /* 	fprintf(stderr, "can't write to file\n"); return; */
-      /* 		}  */
+      if (fwrite(int16_arr2, sizeof(int16_t), readedNums, output_file) != readedNums)
+      	{
+      	  fprintf(stderr, "can't write to file\n"); return;
+      	}
 
 //      fprintf(stderr, "one block updated %u\n", readedNums);
 	  
     }
-	
-	
+  
+  
   fclose(far__file);
   fclose(near__file);
   fclose(err_file);
   fclose(output_file);
 }
 
-/*
-void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
-	      const char *first_filename,
-	      const char *second_filename,
-	      const char *err_filename,
-	      const char *output_filename)
-{
-
-  FILE *first_file = NULL;
-  FILE *second_file = NULL;
-  size_t readedBlocks = 0;
-
-  size_t readed_from_first = 0;
-  size_t readed_from_second = 0;
-
-
-
-  first_file = fopen(first_filename, "rb");
-
-  second_file = fopen(second_filename, "rb");
-
-
-  while(!feof(first_file) && !feof(second_file))
-    {
-      size_t t1, t2;
-      int16_t int16_arr1[FRAME_SIZE];
-      int16_t int16_arr2[FRAME_SIZE];
-     
-      t1 = fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, first_file);
-      t2 = fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, second_file);
-
-      readed_from_first += t1;
-      readed_from_second += t2;
-      fprintf(stderr, "block #%d, readed %d bytes from first file\nreaded %d bytes from second file\n", ++readedBlocks, t1*sizeof(int16_t), t2*sizeof(int16_t));
-    }
-  
-  fclose(first_file);
-  fclose(second_file);
-} */
 
 
 //char filterStruct[1000];
@@ -186,8 +147,8 @@ int main()
   
   
   testAlgo(rlms_func, filterStruct,	       \
-	   "g165/filtered_noise_10.dat",       \
-	   "g165/echo_10_128.dat",	       \
+	   "g165/filtered_noise_10.txt",       \
+	   "g165/echo_10_128.txt",	       \
 	   "error.dat",			       \
 	   "output.dat"
 	   ); 
