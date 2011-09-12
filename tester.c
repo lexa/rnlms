@@ -125,7 +125,7 @@ void testBlock(FunctionOfTwoArgs func, void  *filterStruct, const NUM *far_, con
 /*   fclose(output_file);  */
 /* } */
 
-
+/*
 void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 	      const char *first_filename,
 	      const char *second_filename,
@@ -163,7 +163,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
   
   fclose(first_file);
   fclose(second_file);
-}
+} */
 
 
 //char filterStruct[1000];
@@ -172,8 +172,6 @@ int main()
 {
   void *filterStruct = malloc(rlms_sizeOfRequiredMemory(FILTER_LEN)); 
   assert(NULL != filterStruct);
-  /* fprintf(stderr, "required mem size: %d", rlms_sizeOfRequiredMemory(FILTER_LEN)); */
-  //assert(rlms_sizeOfRequiredMemory(FILTER_LEN) < sizeof (filterStruct));
 
   
   rlms_init(filterStruct, 100, 0.1f, 0.999f, FILTER_LEN);
