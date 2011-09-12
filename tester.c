@@ -1,41 +1,46 @@
 #include "tester.h"
 
 
-void testAlgo(
-	      const char *far__filename)
+void readTwoFiles(const char *first_filename, const char *second_filename)
 {
 			
-  FILE *far__file = NULL;
-  int cnt_blocks=0;
-  long int total_readed_nums=0;
+  FILE *first_file = NULL;
+  FILE *second_file = NULL;
+  size_t readedBlocks = 0;
+
+  size_t readed_from_first = 0;
+  size_t readed_from_second = 0;
 
 
-  if (NULL == (far__file = fopen(far__filename, "r")))
-    {
-      fprintf(stderr, "can't open file\n"); return;
-    }
+
+	first_file = fopen(first_filename, "rb");
+	
+	second_file = fopen(second_filename, "rb");
 	
 
-  while(!feof(far__file))
+  while(!feof(first_file) && !feof(second_file))
     {
-      size_t t1;
+      size_t t1, t2;
       int16_t int16_arr1[FRAME_SIZE];
+      int16_t int16_arr2[FRAME_SIZE];
      
-      t1 = fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file);
+      t1 = fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, first_file);
+      t2 = fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, second_file);
 
-      total_readed_nums += t1;
-      fprintf(stderr, "block #%d readed, size: %d bytes\n", ++cnt_blocks, t1*sizeof(int16_t));
+      readed_from_first += t1;
+      readed_from_second += t2;
+      fprintf(stderr, "block #%d, readed %d bytes from first file\nreaded %d bytes from second file\n", ++readedBlocks, t1*sizeof(int16_t), t2*sizeof(int16_t));
     }
   
-  fprintf(stderr, "Total bytes readed: %ld\n", total_readed_nums*sizeof(int16_t));
-  fclose(far__file);
+  fclose(first_file);
+  fclose(second_file);
 }
 
 
 int main()
 {
 
-  testAlgo("g165/filtered_noise_20.dat"); 
+  readTwoFiles("g165/filtered_noise_20.dat", "g165/echo_10_128.dat"); 
 
   printf("exit successfull");
   return (EXIT_SUCCESS);
