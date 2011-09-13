@@ -1,8 +1,0 @@
--z -c -heap8000 -m"./Debug/rnlms.map" -o"./Debug/rnlms.out" -stack1600 -w -x -i"C:/CCStudio_v3.3/C6000/csl/lib" -i"C:/CCStudio_v3.3/C6000/xdais/lib" -i"C:/CCStudio_v3.3/bios_5_31_02/packages/ti/bios/lib" -i"C:/CCStudio_v3.3/bios_5_31_02/packages/ti/rtdx/lib/c6000" -i"C:/CCStudio_v3.3/C6000/cgtools/lib"
-"C:\CCStudio_v3.3\MyProjects\rnlms\rnlms.cmd"
-"C:\CCStudio_v3.3\MyProjects\rnlms\Debug\CircularBuffer.obj"
-"C:\CCStudio_v3.3\MyProjects\rnlms\Debug\global.obj"
-"C:\CCStudio_v3.3\MyProjects\rnlms\Debug\rnlms.obj"
-"C:\CCStudio_v3.3\MyProjects\rnlms\Debug\tester.obj"
-"C:\CCStudio_v3.3\MyProjects\rnlms\Debug\utils.obj"
-"C:\CCStudio_v3.3\C6000\cgtools\lib\rts6700.lib"
