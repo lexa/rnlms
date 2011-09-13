@@ -1,4 +1,4 @@
-
+\
 #include <string.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -11,5 +11,5 @@
 
 
 #define FRAME_SIZE   256
-#define FILTER_LEN   600
+#define FILTER_LEN   200
 
