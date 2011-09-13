@@ -11,3 +11,11 @@
 /Debug/error.dat
 /Debug/output.dat
 /bin_to_ccs_dat_converter
+/rnlms.CS_
+/rnlms.sbl
+/Debug/*.obj
+/Debug/rnlms.map
+/Debug/rnlms.func_info
+/Debug.lkf
+/Debug/rnlms.out
+/cc_build_Debug.log
