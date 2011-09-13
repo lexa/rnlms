@@ -45,13 +45,13 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
       fprintf(stderr, "can't open file\n"); return;
     }
   
-  if (NULL == (err_file = fopen(err_filename, "w")))
+  if (NULL == (err_file = fopen(err_filename, "wb")))
     {
       fclose(far__file);
       fclose(near__file);
       fprintf(stderr, "can't open file\n"); return;
     }
-  if (NULL == (output_file = fopen(output_filename, "w")))
+  if (NULL == (output_file = fopen(output_filename, "wb")))
     {
       fclose(far__file);
       fclose(near__file);
@@ -62,10 +62,10 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 
   while(!feof(far__file) && !feof(near__file))
     {
-      		int i;
-      size_t  readedNums=255, t1=255, t2=255;
-      int16_t int16_arr1[FRAME_SIZE]={255};
-      int16_t int16_arr2[FRAME_SIZE]={255};
+      /*      int i;*/
+      size_t  readedNums, t1, t2;
+      int16_t int16_arr1[FRAME_SIZE];
+      int16_t int16_arr2[FRAME_SIZE];
 	  
       /* memset (int16_arr1, 0, FRAME_SIZE * 2); */
       /* memset (int16_arr2, 0, FRAME_SIZE *  2); */
@@ -74,31 +74,26 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
       /*читает один блок*/
 
       if (FRAME_SIZE != (t1 = fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file)))
-	{
-	  fprintf(stderr, "warning, readed less then FRAME_SIZE(from far__file)");
-	}
+      	{
+      	  fprintf(stderr, "warning, readed less then FRAME_SIZE(from far__file)");
+      	}
       
       if (FRAME_SIZE != (t2 = fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file)))
-	{
-	  fprintf(stderr, "warning, readed less then FRAME_SIZE(from near__file)");
-	}
+      	{
+      	  fprintf(stderr, "warning, readed less then FRAME_SIZE(from near__file)");
+      	}
       
-      /* for (i=0; i<FRAME_SIZE; i++) */
-      /* 	{ */
-      /* 	  fprintf(stdout, "%d\n", int16_arr1[i]); */
-      /* 	} */
-
-
       /* for (i=0; i<FRAME_SIZE; i++) */
       /* 	{ */
       /* 	  int tmp1, tmp2; */
       /* 	  fscanf(far__file, "%d", &tmp1); */
       /* 	  fscanf(near__file, "%d", &tmp2); */
       /* 	  int16_arr1[i] = tmp1; */
-      /* 	  int16_arr2[i] = tmp2;  */
-      /* 	  printf("%d\n", tmp1); */
+      /* 	  int16_arr2[i] = tmp2; */
+      /* 	  //	  printf("%d\n", tmp1); */
       /* 	} */
-      
+
+      /* t2=t1=FRAME_SIZE; */
 
       readedNums = MIN_size_t (t1,t2);
       
@@ -127,7 +122,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
       	  fprintf(stderr, "can't write to file\n"); return;
       	}
 
-//      fprintf(stderr, "one block updated %u\n", readedNums);
+      /*      fprintf(stderr, "one block updated %u\n", readedNums);*/
 	  
     }
   
@@ -140,7 +135,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 
 
 
-//char filterStruct[1000];
+
 
 int main()
 {
@@ -152,8 +147,8 @@ int main()
   
   
   testAlgo(rlms_func, filterStruct,	       \
-	   "g165/filtered_noise_30.dat",       \
-	   "g165/echo_30_512.dat",	       \
+	   "g165/filtered_noise_10.dat",       \
+	   "g165/echo_10_128.dat",	       \
 	   "error.dat",			       \
 	   "output.dat"
 	   ); 
