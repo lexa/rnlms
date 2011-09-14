@@ -38,7 +38,7 @@ convolution_CB_and_CB(const CB * const buf0, const CB * const buf1)
 {
   size_t i;
   NUM rez;
-  assert(buf0->len != buf1->len);
+  assert(buf0->len == buf1->len);
   i = 0;
   rez = 0.0;
   for (; i<buf0->len; ++i)

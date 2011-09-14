@@ -75,12 +75,15 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 
       if (FRAME_SIZE != (t1 = fread(int16_arr1, sizeof(int16_t), FRAME_SIZE, far__file)))
       	{
-      	  fprintf(stderr, "warning, readed less then FRAME_SIZE(from far__file)");
+      	  //fprintf(stderr, "warning, readed less then FRAME_SIZE(from far__file)");
+	  break;
       	}
       
       if (FRAME_SIZE != (t2 = fread(int16_arr2, sizeof(int16_t), FRAME_SIZE, near__file)))
       	{
-      	  fprintf(stderr, "warning, readed less then FRAME_SIZE(from near__file)");
+      	  //fprintf(stderr, "warning, readed less then FRAME_SIZE(from near__file)");
+	  break;
+	  
       	}
       
       /* for (i=0; i<FRAME_SIZE; i++) */
@@ -143,15 +146,29 @@ int main()
   assert(NULL != filterStruct);
 
   
-  rlms_init(filterStruct, 100, 0.1f, 0.999f, FILTER_LEN);
+  rlms_init(filterStruct, 100, .3f, 0.9999, FILTER_LEN);
   
   
+  /* testAlgo(rlms_func, filterStruct,	       \ */
+  /* 	   "g165/filtered_noise_10.dat",       \ */
+  /* 	   "g165/echo_10_128.dat",	       \ */
+  /* 	   "error.dat",			       \ */
+  /* 	   "output.dat" */
+  /* 	   ); */
+
   testAlgo(rlms_func, filterStruct,	       \
-	   "g165/filtered_noise_10.dat",       \
-	   "g165/echo_10_128.dat",	       \
-	   "error.dat",			       \
-	   "output.dat"
-	   ); 
+  	   "torvalds-says-linux.pcm",       \
+  	   "torvalds-says-linux_echo.pcm",	       \
+  	   "error.dat",			       \
+  	   "output.dat"
+  	   );
+
+  /* testAlgo(rlms_func, filterStruct,	       \ */
+  /* 	   "noise_two_levels.pcm",       \ */
+  /* 	   "noise_two_levels_echo.pcm",	       \ */
+  /* 	   "error.dat",			       \ */
+  /* 	   "output.dat" */
+  /* 	   ); */
 
   free(filterStruct); 
   printf("exit successfull");

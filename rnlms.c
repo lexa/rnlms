@@ -50,23 +50,6 @@ void* rlms_init(void *mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filte
 	return rez;
 }
 
-/*NUM median*/
-
-NUM filter_output(const SimpleIIRFilter *f)
-{
-	/* NUM rez=0.0; */
-	/* int i = 0; */
-	/* NUM *coeff = f->coeff; */
-	/* NUM *sig = f->sig; */
-	
-	/* for(; i < f->len; ++i) */
-	/* { */
-	/* 	rez += f->coeff[i] * f->sig[i]; */
-	/* } */
-	
-  return convolution_CB_and_vector(f->sig, f->coeff);
- 
-}
 
 /*вычисляет X*X'*/
 NUM calc_norma (const NUM *A, size_t len)
@@ -95,12 +78,67 @@ void insert_right(NUM *arr, NUM val, size_t len)
 
 
 /*выполняет для адаптацию*/
+/* NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output) */
+/* { */
+/* 	SimpleIIRFilter *f = f_; */
+	
+/* 	int i; */
+
+/* 	/\*	NUM norma = convolution_CB_and_CB(f->sig, f->sig); *\/ */
+/* 	f->norma += sqr(far_) - sqr(CB_get_first_elem(f->sig)) ; */
+
+/* 	/\* fprintf(stderr, "%g | %g\n", CB_get_first_elem(f->sig), CB_get_elem(f->sig, f->sig->len)); *\/ */
+/* 	/\* assert (CB_get_first_elem(f->sig) == CB_get_elem(f->sig, f->sig->len)); *\/ */
+
+/* 	CB_push_elem(f->sig, far_); */
+
+
+/* 	/\* *output = filter_output(f); *\/ */
+/* 	*output = convolution_CB_and_vector(f->sig, f->coeff); */
+/* 	*err = near_ - *output; */
+
+/* 	/\*	fprintf(stderr, "%g\n", f->DELTA);*\/ */
+
+/* 	if ((NUM_abs(*err)/NUM_sqrt(f->norma)) < f->DELTA)  */
+/* 	{ */
+/* 		NUM tmp = f->BETTA+f->norma; */
+/* 		size_t i; */
+/* 		for (i =0; i<f->len; ++i) */
+/* 		{ */
+/* 			NUM x_i = CB_get_elem(f->sig, i); */
+/*              		f->coeff[i] += (*err)*(x_i/tmp); */
+			
+/* 		} */
+/* 	} else { */
+/* 		NUM tmp = NUM_sqrt(f->BETTA + f->norma) * SIGN(*err); */
+/* 		size_t i; */
+/* 		for (i =0; i<f->len; ++i) */
+/* 		{ */
+/* 			NUM x_i = CB_get_elem(f->sig, i); */
+/* 			f->coeff[i] += f->DELTA*(x_i/tmp); */
+			
+/* 		} */
+/* 	} */
+/* 	f->DELTA = f->MEMORY_FACTOR * f->DELTA + (1 - (f->MEMORY_FACTOR)) * MIN(sqr(*err)/(f->norma), f->DELTA); */
+	
+
+/* 	/\*	printf("\n");*\/ */
+/* 	/\* printf("%g %g %g\n", f->coeff[0], f->coeff[f->len/2], f->coeff[f->len-1]); *\/ */
+/* 	/\* printf("%g %g %g\n", f->sig[0], f->sig[f->len/2], f->sig[f->len-1]); *\/ */
+/* 	return *err; */
+/* } */
+
+
+/* просто LMS */
 NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 {
 	SimpleIIRFilter *f = f_;
+	
+	int i;
 
 	/*	NUM norma = convolution_CB_and_CB(f->sig, f->sig); */
 	f->norma += sqr(far_) - sqr(CB_get_first_elem(f->sig)) ;
+	//	f->norma = convolution_CB_and_CB(f->sig, f->sig); 
 
 	/* fprintf(stderr, "%g | %g\n", CB_get_first_elem(f->sig), CB_get_elem(f->sig, f->sig->len)); */
 	/* assert (CB_get_first_elem(f->sig) == CB_get_elem(f->sig, f->sig->len)); */
@@ -114,7 +152,7 @@ NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 
 	/*	fprintf(stderr, "%g\n", f->DELTA);*/
 
-	if ((NUM_abs(*err)/NUM_sqrt(f->norma)) < f->DELTA) 
+	if ((NUM_abs(*err)/NUM_sqrt(f->norma)) < f->DELTA)
 	{
 		NUM tmp = f->BETTA+f->norma;
 		size_t i;
@@ -134,10 +172,12 @@ NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 			
 		}
 	}
-	f->DELTA = f->MEMORY_FACTOR * f->DELTA + (1-f->MEMORY_FACTOR) * MIN(sqr(*err)/(f->norma), f->DELTA);
+	f->DELTA = f->MEMORY_FACTOR * f->DELTA + (1 - (f->MEMORY_FACTOR)) * MIN(sqr(*err)/(f->norma), f->DELTA);
+	//	f->DELTA = f->MEMORY_FACTOR * f->DELTA + (1 - (f->MEMORY_FACTOR)) * (sqr(*err)/sqrt(f->norma));
 
+	
 
-	/*	printf("\n");*/
+	fprintf(stderr, "%g %g %g %g %g\n", f->DELTA, (sqr(*err)/(sqrt(f->norma))), sqr(*err), f->norma);
 	/* printf("%g %g %g\n", f->coeff[0], f->coeff[f->len/2], f->coeff[f->len-1]); */
 	/* printf("%g %g %g\n", f->sig[0], f->sig[f->len/2], f->sig[f->len-1]); */
 	return *err;
