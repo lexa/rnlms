@@ -1,0 +1,116 @@
+% generate white noise with levels -10dBm0, -15dBm0,
+% -20dBm0, -25dBm0, -30dBm0
+clear all;
+
+load filter_300_3400; % load filter_coefs from filter_300_3400.mat
+load echo_path_128_256_512_1024.mat; %load echo_path_128, echo_path_256, 
+      %echo_path_512, echo_path_1024 from echo_path_128_256_512_1024.mat
+
+x=2^15*sin(0:pi/8000:10*pi-pi/8000); % set level 3.14dBm0 for 16-bit
+
+y=awgn(x,13.14,'measured',1506);
+filtered_noise_10=filter(filter_coefs, 1,y-x);
+echo_10_128=filter(echo_path_128, 1, filtered_noise_10);
+echo_10_256=filter(echo_path_256, 1, filtered_noise_10);
+echo_10_512=filter(echo_path_512, 1, filtered_noise_10);
+echo_10_1024=filter(echo_path_1024, 1, filtered_noise_10);
+
+y=awgn(x,18.14,'measured',1106);
+filtered_noise_15=filter(filter_coefs, 1,y-x);
+echo_15_128=filter(echo_path_128, 1, filtered_noise_15);
+echo_15_256=filter(echo_path_256, 1, filtered_noise_15);
+echo_15_512=filter(echo_path_512, 1, filtered_noise_15);
+echo_15_1024=filter(echo_path_1024, 1, filtered_noise_15);
+
+y=awgn(x,23.14,'measured',1234);
+filtered_noise_20=filter(filter_coefs,1,y-x);
+echo_20_128=filter(echo_path_128, 1, filtered_noise_20);
+echo_20_256=filter(echo_path_256, 1, filtered_noise_20);
+echo_20_512=filter(echo_path_512, 1, filtered_noise_20);
+echo_20_1024=filter(echo_path_1024, 1, filtered_noise_20);
+
+y=awgn(x,28.14,'measured',1234);
+filtered_noise_25=filter(filter_coefs,1,y-x);
+echo_25_128=filter(echo_path_128, 1, filtered_noise_25);
+echo_25_256=filter(echo_path_256, 1, filtered_noise_25);
+echo_25_512=filter(echo_path_512, 1, filtered_noise_25);
+echo_25_1024=filter(echo_path_1024, 1, filtered_noise_25);
+
+y=awgn(x,33.14,'measured',237);
+filtered_noise_30=filter(filter_coefs,1,y-x);
+echo_30_128=filter(echo_path_128, 1, filtered_noise_30);
+echo_30_256=filter(echo_path_256, 1, filtered_noise_30);
+echo_30_512=filter(echo_path_512, 1, filtered_noise_30);
+echo_30_1024=filter(echo_path_1024, 1, filtered_noise_30);
+
+% save white noise to files
+fid_far_10=fopen('filtered_noise_10.dat','w');
+fid_far_15=fopen('filtered_noise_15.dat','w');
+fid_far_20=fopen('filtered_noise_20.dat','w');
+fid_far_25=fopen('filtered_noise_25.dat','w');
+fid_far_30=fopen('filtered_noise_30.dat','w');
+fid_echo_10_128=fopen('echo_10_128.dat','w');
+fid_echo_15_128=fopen('echo_15_128.dat','w');
+fid_echo_20_128=fopen('echo_20_128.dat','w');
+fid_echo_25_128=fopen('echo_25_128.dat','w');
+fid_echo_30_128=fopen('echo_30_128.dat','w');
+fid_echo_10_256=fopen('echo_10_256.dat','w');
+fid_echo_15_256=fopen('echo_15_256.dat','w');
+fid_echo_20_256=fopen('echo_20_256.dat','w');
+fid_echo_25_256=fopen('echo_25_256.dat','w');
+fid_echo_30_256=fopen('echo_30_256.dat','w');
+fid_echo_10_512=fopen('echo_10_512.dat','w');
+fid_echo_15_512=fopen('echo_15_512.dat','w');
+fid_echo_20_512=fopen('echo_20_512.dat','w');
+fid_echo_25_512=fopen('echo_25_512.dat','w');
+fid_echo_30_512=fopen('echo_30_512.dat','w');
+fid_echo_10_1024=fopen('echo_10_1024.dat','w');
+fid_echo_15_1024=fopen('echo_15_1024.dat','w');
+fid_echo_20_1024=fopen('echo_20_1024.dat','w');
+fid_echo_25_1024=fopen('echo_25_1024.dat','w');
+fid_echo_30_1024=fopen('echo_30_1024.dat','w');
+
+
+fwrite(fid_far_10, filtered_noise_10, 'int16');
+fwrite(fid_far_15, filtered_noise_15, 'int16');
+fwrite(fid_far_20, filtered_noise_20, 'int16');
+fwrite(fid_far_25, filtered_noise_25, 'int16');
+fwrite(fid_far_30, filtered_noise_30, 'int16');
+fwrite(fid_echo_10_128, echo_10_128, 'int16');
+fwrite(fid_echo_15_128, echo_15_128, 'int16');
+fwrite(fid_echo_20_128, echo_20_128, 'int16');
+fwrite(fid_echo_25_128, echo_25_128, 'int16');
+fwrite(fid_echo_30_128, echo_30_128, 'int16');
+fwrite(fid_echo_10_256, echo_10_256, 'int16');
+fwrite(fid_echo_15_256, echo_15_256, 'int16');
+fwrite(fid_echo_20_256, echo_20_256, 'int16');
+fwrite(fid_echo_25_256, echo_25_256, 'int16');
+fwrite(fid_echo_30_256, echo_30_256, 'int16');
+fwrite(fid_echo_10_512, echo_10_512, 'int16');
+fwrite(fid_echo_15_512, echo_15_512, 'int16');
+fwrite(fid_echo_20_512, echo_20_512, 'int16');
+fwrite(fid_echo_25_512, echo_25_512, 'int16');
+fwrite(fid_echo_30_512, echo_30_512, 'int16');
+fwrite(fid_echo_10_1024, echo_10_1024, 'int16');
+fwrite(fid_echo_15_1024, echo_15_1024, 'int16');
+fwrite(fid_echo_20_1024, echo_20_1024, 'int16');
+fwrite(fid_echo_25_1024, echo_25_1024, 'int16');
+fwrite(fid_echo_30_1024, echo_30_1024, 'int16');
+
+fclose('all');
+
+% check the data in files
+%plot(x)
+grid
+hold on
+
+fid10=fopen('filtered_noise_10.dat','r');
+fid20=fopen('echo_10_512.dat','r');
+
+white_noise=fread(fid10, 'int16');
+%plot(white_noise);
+
+white_noise=fread(fid20, 'int16');
+%plot(white_noise, 'r');
+
+fclose('all');

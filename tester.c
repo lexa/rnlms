@@ -146,7 +146,7 @@ int main()
   assert(NULL != filterStruct);
 
   
-  rlms_init(filterStruct, 100, .3f, 0.9999, FILTER_LEN);
+  rlms_init(filterStruct, 1, .3f, 0.9999, FILTER_LEN);
   
   
   /* testAlgo(rlms_func, filterStruct,	       \ */
