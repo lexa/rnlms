@@ -10,7 +10,7 @@
 #define NUM float
 
 #define NUM_abs(x) fabsf(x)
-#define NUM_sqrt(x) my_sqrtf(x)
+#define NUM_sqrt(x) sqrtf(x)
 
 NUM sqr (NUM n);
 NUM my_sqrtf (NUM n);

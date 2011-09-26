@@ -98,7 +98,7 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 
       /* t2=t1=FRAME_SIZE; */
 
-      readedNums = MIN_size_t (t1,t2);
+      readedNums = MIN (t1,t2);
       
       convert_from_int16_to_NUM(int16_arr1, far_, readedNums);
       convert_from_int16_to_NUM(int16_arr2, near_, readedNums);
@@ -142,28 +142,28 @@ void testAlgo(FunctionOfTwoArgs func, void* filterStruct,
 
 int main()
 {
-  void *filterStruct = malloc(rlms_sizeOfRequiredMemory(FILTER_LEN)); 
+  void *filterStruct = malloc(rnlms_sizeOfRequiredMemory(FILTER_LEN)); 
   assert(NULL != filterStruct);
 
   
-  rlms_init(filterStruct, 1, .3f, 0.9999, FILTER_LEN);
+  rnlms_init(filterStruct, 1, .3f, 0.9999, FILTER_LEN);
   
   
-  /* testAlgo(rlms_func, filterStruct,	       \ */
-  /* 	   "g165/filtered_noise_10.dat",       \ */
-  /* 	   "g165/echo_10_128.dat",	       \ */
-  /* 	   "error.dat",			       \ */
-  /* 	   "output.dat" */
-  /* 	   ); */
-
-  testAlgo(rlms_func, filterStruct,	       \
-  	   "torvalds-says-linux.pcm",       \
-  	   "torvalds-says-linux_echo.pcm",	       \
+  testAlgo(rnlms_func, filterStruct,	       \
+  	   "g165/filtered_noise_10.dat",       \
+  	   "g165/echo_10_128.dat",	       \
   	   "error.dat",			       \
   	   "output.dat"
   	   );
 
-  /* testAlgo(rlms_func, filterStruct,	       \ */
+  /* testAlgo(rnlms_func, filterStruct,	       \ */
+  /* 	   "torvalds-says-linux.pcm",       \ */
+  /* 	   "torvalds-says-linux_echo.pcm",	       \ */
+  /* 	   "error.dat",			       \ */
+  /* 	   "output.dat" */
+  /* 	   ); */
+
+   /* testAlgo(rnlms_func, filterStruct,	       \ */
   /* 	   "noise_two_levels.pcm",       \ */
   /* 	   "noise_two_levels_echo.pcm",	       \ */
   /* 	   "error.dat",			       \ */

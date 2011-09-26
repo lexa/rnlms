@@ -18,7 +18,7 @@ typedef struct
 
 
 
-size_t rlms_sizeOfRequiredMemory(size_t filter_len)
+size_t rnlms_sizeOfRequiredMemory(size_t filter_len)
 {
 	return sizeof(SimpleIIRFilter) + \
 		(sizeof(NUM)*filter_len) + \
@@ -26,7 +26,7 @@ size_t rlms_sizeOfRequiredMemory(size_t filter_len)
 }
 
 /*инициализирует структуру для фильтра, по уже выделенной памяти*/
-void* rlms_init(void *mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len)
+void* rnlms_init(void *mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len)
 {
 	size_t i;
 	SimpleIIRFilter *rez = mem;
@@ -78,11 +78,11 @@ void insert_right(NUM *arr, NUM val, size_t len)
 
 
 /*выполняет для адаптацию*/
-NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
+NUM rnlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 {
 	SimpleIIRFilter *f = f_;
 	
-	int i;
+		/* int i; */
 
 	/*	NUM norma = convolution_CB_and_CB(f->sig, f->sig); */
 	f->norma += sqr(far_) - sqr(CB_get_first_elem(f->sig)) ;
@@ -130,7 +130,7 @@ NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output)
 
 
 /* просто LMS */
-/* NUM rlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output) */
+/* NUM rnlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output) */
 /* { */
 /* 	SimpleIIRFilter *f = f_; */
 	

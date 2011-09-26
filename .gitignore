@@ -17,3 +17,5 @@
 /Debug.lkf
 /Debug/rnlms.out
 /cc_build_Debug.log
+/librnlms.so
+/tester.rkt
