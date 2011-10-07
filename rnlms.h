@@ -1,4 +1,3 @@
-
 #ifndef _RNLMS_H_
 #define _RNLMS_H_
 
@@ -14,13 +13,29 @@
 /*#define FILTER_LEN 300;*/
 
 
+// Possible output description
+typedef enum RNLMS_Result{
+    E_NO_ERROR = 0,
+      E_ERROR,
+      E_BAD_MAIN_DATA,
+      E_BAD_BUFF_DATA
+} rnlms_result;
+
+// Handler for one RNLMS instance
+typedef void *rnlms_data_hnd;
+
 /*показывает сколько памяти портебуется для хранения фильтра длинны filter_len*/
-size_t rnlms_sizeOfRequiredMemory(size_t filter_len);
+size_t sizeof_rnlms(size_t filter_len);
 
 /*инициализирует структуру филтра, по уже выделенной памяти, сама функция ничего не выделяет*/
-void* rnlms_init(void *mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len); 
+rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len); 
 
-NUM rnlms_func(void*, NUM, NUM, NUM* err, NUM* out);
+// process x_arr and y_arr, puts result into err_out buffer all the buffers are served by user
+rnlms_result rnlms_process(rnlms_data_hnd rnlms_hnd,
+			   const int16_t *x_arr,        // far abonent signal
+			   const int16_t *y_arr,        // near abonent signal
+			   int16_t *err_out,    // result with reduced echo
+			   size_t size);
 
 #endif /* _RNLMS_H_ */
 

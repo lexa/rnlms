@@ -7,7 +7,7 @@
 #include <stdio.h>
 /*typedef float NUM;*/
 
-#define NUM float
+typedef float NUM;
 
 #define NUM_abs(x) fabsf(x)
 #define NUM_sqrt(x) sqrtf(x)
