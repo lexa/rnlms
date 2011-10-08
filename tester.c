@@ -12,7 +12,7 @@
 /*     } */
 /* } */
 
-void testAlgo(rnlms_hnd filterStruct,
+void testAlgo(rnlms_data_hnd filterStruct,
 	      const char *far__filename,
 	      const char *near__filename,
 	      const char *err_filename,
@@ -75,9 +75,9 @@ void testAlgo(rnlms_hnd filterStruct,
       
       readedNums = MIN (t1,t2);
       
-	  printf("one block readed\n");
+      //      printf("one block readed\n");
       rnlms_process(filterStruct, far_arr, near_arr, err_arr, readedNums);
-	  printf("one block processed\n");
+      //printf("one block processed\n");
 	  
       /* /\*сохраняет обработанные данные*\/ */
 
@@ -99,7 +99,7 @@ void testAlgo(rnlms_hnd filterStruct,
 
 int main()
 {
-  rnlms_hnd filterStruct = malloc(sizeof_rnlms(FILTER_LEN)); 
+  rnlms_data_hnd filterStruct = malloc(sizeof_rnlms(FILTER_LEN)); 
   assert(NULL != filterStruct);
 
   rnlms_init_struct(filterStruct, 1, .3f, 0.9999, FILTER_LEN);

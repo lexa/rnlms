@@ -14,9 +14,8 @@ size_t sizeof_rnlms(size_t filter_len)
 }
 
 /*инициализирует структуру для фильтра, по уже выделенной памяти*/
-rnlms_result rnlms_init_struct(rnlms_hnd mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len)
+rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len)
 {
-  size_t i;
   struct rnlms_data* rez = mem;
 
   rez->len = filter_len;
@@ -25,18 +24,10 @@ rnlms_result rnlms_init_struct(rnlms_hnd mem, NUM BETTA, NUM DELTA, NUM MEMORY_F
   rez->norma = 0.0; 
   rez->MEMORY_FACTOR = MEMORY_FACTOR;
   rez->coeff = (NUM*)(rez + 1);
-  memset(rez->coeff, 0, sizeof(NUM)*filter_len);
-	
-  rez->sig = CB_init(&(rez->coeff[rez->len]), rez->len);
 
 
-  i = 0;
-  for (; i<rez->len; ++i)
-    {
-      rez->coeff[i] = 0.0;
-      /*		rez->sig[i] = 0.0;*/
-    }
-  return E_NO_ERROR;
+  
+  return rnlms_clean_buff(mem);
 }
 
 
@@ -67,14 +58,9 @@ void insert_right(NUM *arr, NUM val, size_t len)
 
 
 /*выполняет для адаптацию*/
-NUM rnlms_func(rnlms_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
+NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
 {
-	size_t i;
-  //  rnlms_data *f = f_;
-
-  //  fprintf(stderr, "%g %g\n", far_, near_);
-	
-  /* int i; */
+  size_t i;
 
   /*	NUM norma = convolution_CB_and_CB(f->sig, f->sig); */
   f->norma += sqr(far_) - sqr(CB_get_first_elem(f->sig)) ;
@@ -120,7 +106,7 @@ NUM rnlms_func(rnlms_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
   return *err;
 }
 
-rnlms_result rnlms_process(rnlms_hnd rnlms_hnd, 
+rnlms_result rnlms_process(rnlms_data_hnd rnlms_hnd, 
 			   const int16_t *x_arr,        // far abonent signal
 			   const int16_t *y_arr,        // near abonent signal
 			   int16_t *err_out,    // result with reduced echo
@@ -164,3 +150,20 @@ rnlms_result rnlms_process(rnlms_hnd rnlms_hnd,
 
 /* 	return *err; */
 /* } */
+
+
+
+rnlms_result rnlms_clean_buff(rnlms_data_hnd rez)
+{
+  size_t i;
+  memset(rez->coeff, 0, sizeof(NUM)*(rez->len));
+  rez->sig = CB_init(&(rez->coeff[rez->len]), rez->len);
+
+  i = 0;
+  for (; i<rez->len; ++i)
+    {
+      rez->coeff[i] = 0.0;
+    }
+  return E_NO_ERROR;
+  
+}

@@ -12,20 +12,23 @@ typedef enum RNLMS_Result{
 } rnlms_result;
 
 // Handler for one RNLMS instance
-typedef struct rnlms_data* rnlms_hnd;
+typedef struct rnlms_data* rnlms_data_hnd;
 
 /*показывает сколько памяти портебуется для хранения фильтра длинны filter_len*/
 size_t sizeof_rnlms(size_t filter_len);
 
 /*инициализирует структуру филтра, по уже выделенной памяти, сама функция ничего не выделяет*/
-rnlms_result rnlms_init_struct(rnlms_hnd mem, float BETTA, float DELTA, float MEMORY_FACTOR, size_t filter_len); 
+rnlms_result rnlms_init_struct(rnlms_data_hnd mem, float BETTA, float DELTA, float MEMORY_FACTOR, size_t filter_len); 
 
 // process x_arr and y_arr, puts result into err_out buffer all the buffers are served by user
-rnlms_result rnlms_process(rnlms_hnd rnlms_data_hnd,
+rnlms_result rnlms_process(rnlms_data_hnd rnlms_data_hnd,
 			   const int16_t *x_arr,        // far abonent signal
 			   const int16_t *y_arr,        // near abonent signal
 			   int16_t *err_out,    // result with reduced echo
 			   size_t size);
+
+rnlms_result rnlms_clean_buff(rnlms_data_hnd rnlms_data_hnd);
+
 
 #endif 
 

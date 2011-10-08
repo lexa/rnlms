@@ -28,7 +28,7 @@ struct rnlms_data
 /*вычисляет X*X'*/
 NUM calc_norma (const NUM *A, size_t len);
 void insert_right(NUM *arr, NUM val, size_t len);
-NUM rnlms_func(rnlms_hnd f, NUM far_, NUM near_, NUM *err, NUM *output);
+NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output);
 
 #endif /* _RNLMS_H_ */
 
