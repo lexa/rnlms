@@ -27,6 +27,9 @@ rnlms_result rnlms_process(rnlms_data_hnd rnlms_data_hnd,
 			   int16_t *err_out,    // result with reduced echo
 			   size_t size);
 
+/* очистка памяти алгоритма при сохранении его настроек - может */
+/* пригодится, когда надо начать обработку данных заново - например, при */
+/* новом звонке в телефонии. */
 rnlms_result rnlms_clean_buff(rnlms_data_hnd rnlms_data_hnd);
 
 
