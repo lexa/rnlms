@@ -4,36 +4,20 @@
 
 
 
-/*структура не должна торчать наружу*/
-typedef struct 
-{
-  rnlms_data_hnd hnd;
-  NUM BETTA;
-  NUM DELTA;
-  NUM norma;
-  NUM MEMORY_FACTOR;
-  size_t len;
-  /*	NUM *sig;*/
-  CB* sig; /*после инициализации кольцевой буффер лежит после коэффициентов*/
-  NUM *coeff;
-  
-} rnlms_data ;
-
-NUM rnlms_func(rnlms_data* f_, NUM far_, NUM near_, NUM *err, NUM *output);
 
 
 size_t sizeof_rnlms(size_t filter_len)
 {
-  return sizeof(rnlms_data) + \
+  return sizeof(struct rnlms_data) + \
     (sizeof(NUM)*filter_len) + \
     (CB_size(filter_len)) ;
 }
 
 /*инициализирует структуру для фильтра, по уже выделенной памяти*/
-rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len)
+rnlms_result rnlms_init_struct(rnlms_hnd mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len)
 {
   size_t i;
-  rnlms_data* rez = mem;
+  struct rnlms_data* rez = mem;
 
   rez->len = filter_len;
   rez->BETTA = BETTA;
@@ -83,7 +67,7 @@ void insert_right(NUM *arr, NUM val, size_t len)
 
 
 /*выполняет для адаптацию*/
-NUM rnlms_func(rnlms_data* f, NUM far_, NUM near_, NUM *err, NUM *output)
+NUM rnlms_func(rnlms_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
 {
   //  rnlms_data *f = f_;
 
@@ -135,7 +119,7 @@ NUM rnlms_func(rnlms_data* f, NUM far_, NUM near_, NUM *err, NUM *output)
   return *err;
 }
 
-rnlms_result rnlms_process(rnlms_data_hnd rnlms_hnd, 
+rnlms_result rnlms_process(rnlms_hnd rnlms_hnd, 
 			   const int16_t *x_arr,        // far abonent signal
 			   const int16_t *y_arr,        // near abonent signal
 			   int16_t *err_out,    // result with reduced echo

@@ -9,33 +9,26 @@
 #include "global.h"
 #include "utils.h"
 #include "CircularBuffer.h"
+#include "rnlms_interface.h"
 
-/*#define FILTER_LEN 300;*/
+/*структура не должна торчать наружу*/
+struct rnlms_data
+{
+  NUM BETTA;
+  NUM DELTA;
+  NUM norma;
+  NUM MEMORY_FACTOR;
+  size_t len;
+  /*	NUM *sig;*/
+  CB* sig; /*после инициализации кольцевой буффер лежит после коэффициентов*/
+  NUM *coeff;
+  
+}  ;
 
-
-// Possible output description
-typedef enum RNLMS_Result{
-    E_NO_ERROR = 0,
-      E_ERROR,
-      E_BAD_MAIN_DATA,
-      E_BAD_BUFF_DATA
-} rnlms_result;
-
-// Handler for one RNLMS instance
-typedef void *rnlms_data_hnd;
-
-/*показывает сколько памяти портебуется для хранения фильтра длинны filter_len*/
-size_t sizeof_rnlms(size_t filter_len);
-
-/*инициализирует структуру филтра, по уже выделенной памяти, сама функция ничего не выделяет*/
-rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len); 
-
-// process x_arr and y_arr, puts result into err_out buffer all the buffers are served by user
-rnlms_result rnlms_process(rnlms_data_hnd rnlms_hnd,
-			   const int16_t *x_arr,        // far abonent signal
-			   const int16_t *y_arr,        // near abonent signal
-			   int16_t *err_out,    // result with reduced echo
-			   size_t size);
+/*вычисляет X*X'*/
+NUM calc_norma (const NUM *A, size_t len);
+void insert_right(NUM *arr, NUM val, size_t len);
+NUM rnlms_func(rnlms_hnd f, NUM far_, NUM near_, NUM *err, NUM *output);
 
 #endif /* _RNLMS_H_ */
 

@@ -12,7 +12,7 @@
 /*     } */
 /* } */
 
-void testAlgo(rnlms_data_hnd filterStruct,
+void testAlgo(rnlms_hnd filterStruct,
 	      const char *far__filename,
 	      const char *near__filename,
 	      const char *err_filename,
@@ -105,7 +105,7 @@ void testAlgo(rnlms_data_hnd filterStruct,
 
 int main()
 {
-  rnlms_data_hnd filterStruct = malloc(sizeof_rnlms(FILTER_LEN)); 
+  rnlms_hnd filterStruct = malloc(sizeof_rnlms(FILTER_LEN)); 
   assert(NULL != filterStruct);
 
   rnlms_init_struct(filterStruct, 1, .3f, 0.9999, FILTER_LEN);

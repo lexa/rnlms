@@ -5,7 +5,6 @@
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
-/*typedef float NUM;*/
 
 typedef float NUM;
 
