@@ -69,6 +69,7 @@ void insert_right(NUM *arr, NUM val, size_t len)
 /*выполняет для адаптацию*/
 NUM rnlms_func(rnlms_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
 {
+	size_t i;
   //  rnlms_data *f = f_;
 
   //  fprintf(stderr, "%g %g\n", far_, near_);
@@ -102,7 +103,7 @@ NUM rnlms_func(rnlms_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
 	}
     } else {
     NUM tmp = NUM_sqrt(f->BETTA + f->norma) * SIGN(*err);
-    size_t i;
+
     for (i =0; i<f->len; ++i)
       {
 	NUM x_i = CB_get_elem(f->sig, i);
@@ -128,11 +129,11 @@ rnlms_result rnlms_process(rnlms_hnd rnlms_hnd,
   size_t i;
   for(i=0; i<size; i++, x_arr++, y_arr++, err_out++)
     {
-      NUM _far, _near, _err, _out; 
-      _far=*x_arr;
-      _near=*y_arr;
-      rnlms_func(rnlms_hnd, _far, _near, &_err, &_out);
-      *err_out=_err;
+      NUM far_, near_, err_, out_; 
+      far_=*x_arr;
+      near_=*y_arr;
+      rnlms_func(rnlms_hnd, far_, near_, &err_, &out_);
+      *err_out=err_;
     }
   return E_NO_ERROR;
 }

@@ -18,14 +18,6 @@ void testAlgo(rnlms_hnd filterStruct,
 	      const char *err_filename,
 	      const char *output_filename)
 {
-  /*	void *filterStruct = initializer();*/
-  NUM far_ [FRAME_SIZE];
-  NUM near_ [FRAME_SIZE];
-  NUM err [FRAME_SIZE];
-  NUM output [FRAME_SIZE];
-
-  /* int16_t f_, n_; */
-  /* size_t writedNums; */
 			
   FILE *far__file = NULL,
     *near__file = NULL,
@@ -83,7 +75,9 @@ void testAlgo(rnlms_hnd filterStruct,
       
       readedNums = MIN (t1,t2);
       
+	  printf("one block readed\n");
       rnlms_process(filterStruct, far_arr, near_arr, err_arr, readedNums);
+	  printf("one block processed\n");
 	  
       /* /\*сохраняет обработанные данные*\/ */
 
