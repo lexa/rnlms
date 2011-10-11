@@ -30,6 +30,6 @@ NUM calc_norma (const NUM *A, size_t len);
 void insert_right(NUM *arr, NUM val, size_t len);
 NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output);
 
+#define UNUSED(x) (void)(x)
+
 #endif /* _RNLMS_H_ */
-
-
