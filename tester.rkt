@@ -105,9 +105,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;testing-algo;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define algo% (class* object%
+;; (define algo% (class object%
+                
+;;                 (super-new)
+;;                 (init init-func process-func filter-params)
+
+;;                 (define filter (apply init-func filter-params))
+;;                 (define process-func process-func)
+                
+;;                 (define/public (run-test test)
+;; ;;                  (send test check-test-results (call-with-values (send test get-test-data) process-func))
+;;                   #t
+;;                   )))
+
+(define c-algo% (class object%
+                  
                 (super-new)
-                (init lib-name sizeof-func init-struct-func process-func filter-params)
+                (init sizeof-func init-struct-func process-func filter-params)
                 
                 (define filter-mem
                   (let ([mem (malloc (apply sizeof-func filter-params))])
@@ -117,18 +131,17 @@
                 (define c-process-func process-func)
                 
                 (define/public (run-test test)
-                  (call-with-values (send test get-test-data) c-process-func)
+                  (send test check-test-results (call-with-values (send test get-test-data) c-process-func))
                   )))
-                     
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;c-rnlms;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                      
 (define _size_t (make-ctype _ulong #f #f))
 (define _num _float)
 
 (define lib (ffi-lib "/home/lexa/develop/rnlms/librnlms.so"))
 
-
-(define (make-test test-obj 
-
+(define tmp (new algo% [
 
 ;; (define sizeof_rnlms  (get-ffi-obj "sizeof_rnlms" lib (_fun _size_t -> _size_t)))
 
