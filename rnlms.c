@@ -168,12 +168,12 @@ rnlms_result rnlms_clean_buff(rnlms_data_hnd rez)
   
 }
 
-size_t sizeof_rnlms_2(float BETTA, float DELTA, float MEMORY_FACTOR, size_t filter_len)
-//size_t sizeof_rnlms_2(float, float, float, size_t filter_len)
-{
-  UNUSED(BETTA);
-  UNUSED(DELTA);
-  UNUSED(MEMORY_FACTOR);
+/* size_t sizeof_rnlms_2(float BETTA, float DELTA, float MEMORY_FACTOR, size_t filter_len) */
+/* //size_t sizeof_rnlms_2(float, float, float, size_t filter_len) */
+/* { */
+/*   UNUSED(BETTA); */
+/*   UNUSED(DELTA); */
+/*   UNUSED(MEMORY_FACTOR); */
 
-  return sizeof_rnlms(filter_len);
-}
+/*   return sizeof_rnlms(filter_len); */
+/* } */

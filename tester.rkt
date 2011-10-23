@@ -114,25 +114,29 @@
 ;;                 (define process-func process-func)
                 
 ;;                 (define/public (run-test test)
-;; ;;                  (send test check-test-results (call-with-values (send test get-test-data) process-func))
-;;                   #t
+;;                   (send test check-test-results (call-with-values (send test get-test-data) process-func))
 ;;                   )))
 
 (define c-algo% (class object%
                   
                 (super-new)
-                (init sizeof-func init-struct-func process-func filter-params)
+
+                (init sizeof-func init-struct-func c-process-func filter-params)
                 
                 (define filter-mem
                   (let ([mem (malloc (apply sizeof-func filter-params))])
-                    (apply init-struct-func (cons mem filter-params))
+                    (apply init-struct-func mem filter-params)
                     mem))
                 
-                (define c-process-func process-func)
+                (define process-func (lambda (. args) (apply c-process-func mem args)))
                 
                 (define/public (run-test test)
-                  (send test check-test-results (call-with-values (send test get-test-data) c-process-func))
-                  )))
+                  (call-with-values
+                      (call-with-values
+                          (send test get-test-data) process-func)
+                    (lambda(. args) send/apply test check-test-results args)
+                  ))
+                ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;c-rnlms;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                      
@@ -140,8 +144,36 @@
 (define _num _float)
 
 (define lib (ffi-lib "/home/lexa/develop/rnlms/librnlms.so"))
+(define c-rnlms-init-struct (get-ffi-obj "rnlms_init_struct" lib (_fun (data betta delta memory-factor filter-len) :: (data : _pointer) (betta : _num)(delta : _num) (memory-factor : _num) (filter-len : _size_t) -> _int)))
 
-(define tmp (new algo% [
+(define c-rnlms-process(get-ffi-obj "rnlms_process" lib (_fun (hnd x_arr y_arr err_out size) :: (hnd : _pointer) (x_arr : _pointer) (y_arr : _pointer) (err_out : _pointer) (size : _size_t) -> _int)))
+
+(define c-sizeof-rnlms (get-ffi-obj "sizeof_rnlms" lib (_func (filter-len) :: (filter-len : _size_t) -> _size_t)))
+
+(define sizeof-rnlms (BETTA DELTA MEMORY_FACTOR filter_len)
+  (c-sizeof-rnlms filter_len))
+
+(define rnlms-process-func (hnd far near)
+  (let* ([x_arr (malloc (vector-length far)
+  (c-rnlms-process data x_arr y_arr 
+  )
+
+(new c-algo% [sizeof-rnlms sizeof-rnlms] [init-struct-func c-rnlms-init-struct] [c-process-func c-rnlms-process] 
+
+;; (define (init-rnlms BETTA DELTA MEMORY_FACTOR filter_len)
+;;   (let ([mem (malloc (apply sizeof-func filter-params))])
+                      
+;;     (apply c-rnlms-init (list mem BETTA DELTA MEMORY_FACTOR filter_len))
+;;     mem))
+
+
+(define (c-process-func far-data near-data)
+  
+  
+  
+;;дописать инициализациб Cшной функции
+;;проверить как оно работает вообще
+;; сделать g165-1  
 
 ;; (define sizeof_rnlms  (get-ffi-obj "sizeof_rnlms" lib (_fun _size_t -> _size_t)))
 
