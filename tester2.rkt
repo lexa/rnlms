@@ -1,5 +1,6 @@
 #lang racket
 (require ffi/unsafe)
+(require ffi/cvector)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;utilites;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -130,8 +131,11 @@
 
 (define _size_t (make-ctype _ulong #f #f))
 (define _num _float)
+;(define _audio_in (_cvector i _int16 ))
+;(define _audio_out (_cvector i _int16 ))
 
 (define lib (ffi-lib "/home/lexa/develop/rnlms/librnlms.so"))
+  
 (define c-rnlms-init-struct (get-ffi-obj "rnlms_init_struct" lib (_fun (data betta delta memory-factor filter-len) :: (data : _pointer) (betta : _num)(delta : _num) (memory-factor : _num) (filter-len : _size_t) -> _int)))
 
 (define c-rnlms-process(get-ffi-obj "rnlms_process" lib (_fun (hnd x_arr y_arr err_out size) :: (hnd : _pointer) (x_arr : _pointer) (y_arr : _pointer) (err_out : _pointer) (size : _size_t) -> _int)))
@@ -209,7 +213,7 @@
     ))
 
 
-(print (make-g165-1 -30 190 -6 -48 '(1.0 0.3 0.9999 200)))
+(print (make-g165-1 -30 190 -6 -48 '(1.0 0.3 0.9999 2000)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;g165-2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -224,5 +228,7 @@
          [err-out-mem (malloc _int16 (vector-length R-in) )])
 
     (c-rnlms-set-options filter-mem 'OPT_INHIBIT_ADAPTATION)
+
+    
     
   ))
