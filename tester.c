@@ -103,7 +103,8 @@ int main()
   assert(NULL != filterStruct);
 
   rnlms_init_struct(filterStruct, 1, .3f, 0.9999, FILTER_LEN);
-  
+
+  //  rnlms_set_options(filterStruct, OPT_INHIBIT_ADAPTATION);
   
   testAlgo(filterStruct,	       \
   	   "g165/filtered_noise_10.dat",       \

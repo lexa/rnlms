@@ -19,6 +19,7 @@ struct rnlms_data
   NUM norma;
   NUM MEMORY_FACTOR;
   size_t len;
+  rnlms_options opt;
   /*	NUM *sig;*/
   CB* sig; /*после инициализации кольцевой буффер лежит после коэффициентов*/
   NUM *coeff;

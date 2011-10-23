@@ -23,8 +23,8 @@ rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM BETTA, NUM DELTA, NUM MEM
   rez->DELTA = DELTA;
   rez->norma = 0.0; 
   rez->MEMORY_FACTOR = MEMORY_FACTOR;
+  rez->opt = 0;
   rez->coeff = (NUM*)(rez + 1);
-
 
   
   return rnlms_clean_buff(mem);
@@ -70,12 +70,14 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
 
   CB_push_elem(f->sig, far_);
 
-
   /* *output = filter_output(f); */
   *output = convolution_CB_and_vector(f->sig, f->coeff);
   *err = near_ - *output;
 
   /*	fprintf(stderr, "%g\n", f->DELTA);*/
+  
+  if (f->opt & OPT_INHIBIT_ADAPTATION)
+    return *err;
 
   if ((NUM_abs(*err)/NUM_sqrt(f->norma)) < f->DELTA)
     {
@@ -177,3 +179,15 @@ rnlms_result rnlms_clean_buff(rnlms_data_hnd rez)
 
 /*   return sizeof_rnlms(filter_len); */
 /* } */
+
+
+rnlms_options rnlms_get_options(const rnlms_data_hnd mem)
+{
+  return (mem->opt);
+}
+
+rnlms_result rnlms_set_options(rnlms_data_hnd mem, rnlms_options new_opt)
+{
+  mem->opt = new_opt;
+  return E_NO_ERROR;
+}

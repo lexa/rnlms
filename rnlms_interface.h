@@ -11,6 +11,11 @@ typedef enum RNLMS_Result{
       E_BAD_BUFF_DATA
 } rnlms_result;
 
+typedef enum RNLMS_Options{
+  OPT_INHIBIT_ADAPTATION = 1,
+  OPT_DISABLE_NONLINEAR_PROCESSING = 1>>1
+} rnlms_options;
+
 // Handler for one RNLMS instance
 typedef struct rnlms_data* rnlms_data_hnd;
 
@@ -34,8 +39,8 @@ rnlms_result rnlms_process(rnlms_data_hnd rnlms_data_hnd,
 /* новом звонке в телефонии. */
 rnlms_result rnlms_clean_buff(rnlms_data_hnd rnlms_data_hnd);
 
+rnlms_options rnlms_get_options(const rnlms_data_hnd mem);
+
+rnlms_result rnlms_set_options(rnlms_data_hnd mem, rnlms_options);
 
 #endif 
-
-
-
