@@ -63,16 +63,16 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
   size_t i;
 
   /*	NUM norma = convolution_CB_and_CB(f->sig, f->sig); */
-  f->norma += sqr(far_) - sqr(CB_get_first_elem(f->sig)) ;
+  f->norma += sqr(near_) - sqr(CB_get_first_elem(f->sig)) ;
 
   /* fprintf(stderr, "%g | %g\n", CB_get_first_elem(f->sig), CB_get_elem(f->sig, f->sig->len));  */
   /* assert (CB_get_first_elem(f->sig) == CB_get_elem(f->sig, f->sig->len)); */
 
-  CB_push_elem(f->sig, far_);
+  CB_push_elem(f->sig, near_);
 
   /* *output = filter_output(f); */
   *output = convolution_CB_and_vector(f->sig, f->coeff);
-  *err = near_ - *output;
+  *err = far_ - *output;
 
   /*	fprintf(stderr, "%g\n", f->DELTA);*/
   
@@ -87,7 +87,6 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
 	{
 	  NUM x_i = CB_get_elem(f->sig, i);
 	  f->coeff[i] += (*err)*(x_i/tmp);
-			
 	}
     } else {
     NUM tmp = NUM_sqrt(f->BETTA + f->norma) * SIGN(*err);

@@ -107,8 +107,8 @@ int main()
   //  rnlms_set_options(filterStruct, OPT_INHIBIT_ADAPTATION);
   
   testAlgo(filterStruct,	       \
-  	   "g165/filtered_noise_10.dat",       \
   	   "g165/echo_10_128.dat",	       \
+  	   "g165/filtered_noise_10.dat",       \
   	   "error.dat",			       \
   	   "output.dat"
   	   );
