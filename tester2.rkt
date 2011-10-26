@@ -227,8 +227,11 @@
          [filter-mem (malloc (c-sizeof-rnlms filter-len) )]
          [err-out-mem (malloc _int16 (vector-length R-in) )])
 
+    (apply c-rnlms-init-struct filter-mem  filter-params)
     (c-rnlms-set-options filter-mem 'OPT_INHIBIT_ADAPTATION)
 
-    
+    (apply c-rnlms-process filter-mem (vector->mem (sub-vector R-in 1000) _int16) (vector->mem (sub-vector S-in 1000) _int16) err-out-mem)
     
   ))
+
+;;TODO переделать работу rnlms в объект
