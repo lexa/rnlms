@@ -63,6 +63,15 @@ void insert_right(NUM *arr, NUM val, size_t len)
   arr[0]=val;
 }
 
+NUM MIN_f(NUM a, NUM b)
+{
+    return (a<b)?a:b;
+}
+
+NUM SIGN_f(NUM a)
+{
+    return (a<0)?-1.0:1.0;
+}
 
 /*выполняет для адаптацию*/
 NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
@@ -86,27 +95,20 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
   if (f->opt & OPT_INHIBIT_ADAPTATION)
     return *err;
 
-  if ((NUM_abs(*err)/NUM_sqrt(f->norma)) < f->DELTA)
+  /* if ((NUM_abs(*err)/NUM_sqrt(f->norma)) < f->DELTA) */
+
+  for (i =0; i<f->len; ++i)
     {
-      NUM tmp = f->BETTA+f->norma;
-      size_t i;
-      for (i =0; i<f->len; ++i)
-	{
-	  NUM x_i = CB_get_elem(f->sig, i);
-	  f->coeff[i] += (*err)*(x_i/tmp);
-	  fprintf(stderr, "NLMS %g\n", f->DELTA);
-	}
-    } else {
-    NUM tmp = NUM_sqrt(f->BETTA + f->norma) * SIGN(*err);
-    
-    for (i =0; i<f->len; ++i)
-      {
-	NUM x_i = CB_get_elem(f->sig, i);
-	f->coeff[i] += f->DELTA*(x_i/tmp);
-	fprintf(stderr, "delta %g\n", f->DELTA);
-			
-      }
-  }
+      NUM x_i = CB_get_elem(f->sig, i);
+      //      f->coeff[i] += (MIN_f (NUM_abs(*err)/(f->BETTA+NUM_sqrt(f->norma)), f->DELTA)) * (SIGN_f (*err)) * (x_i/(f->BETTA+NUM_sqrt(f->norma))); 
+      NUM MU=0.4;
+      /* MU = MIN_f(f->DELTA/(NUM_abs(*err/32000)/f->norma), 1); */
+      /* f->coeff[i] += (*err)*(x_i/(f->BETTA+f->norma))*MU;  */
+
+      MU = MIN_f(NUM_sqrt(f->DELTA)/(NUM_abs(*err)/NUM_sqrt(f->norma)), 1.0);
+      f->coeff[i] += (*err)*(x_i/(f->BETTA+f->norma))*MU;
+    }
+
   f->DELTA = f->MEMORY_FACTOR * f->DELTA + (1 - (f->MEMORY_FACTOR)) * MIN(sqr(*err)/(f->norma), f->DELTA);
 	
 
