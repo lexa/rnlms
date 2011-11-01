@@ -18,6 +18,12 @@ rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM BETTA, NUM DELTA, NUM MEM
 {
   struct rnlms_data* rez = mem;
 
+  if (MEMORY_FACTOR <= 0.0 || MEMORY_FACTOR >= 1.0)
+    {
+      fprintf(stderr, "MEMORY_FACTOR must be benween 0 and 1\n");
+      return E_BAD_MAIN_DATA;
+    }
+
   rez->len = filter_len;
   rez->BETTA = BETTA;
   rez->DELTA = DELTA;
@@ -26,6 +32,7 @@ rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM BETTA, NUM DELTA, NUM MEM
   rez->opt = 0;
   rez->coeff = (NUM*)(rez + 1);
 
+  
   
   return rnlms_clean_buff(mem);
 }
@@ -87,14 +94,16 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
 	{
 	  NUM x_i = CB_get_elem(f->sig, i);
 	  f->coeff[i] += (*err)*(x_i/tmp);
+	  fprintf(stderr, "NLMS %g\n", f->DELTA);
 	}
     } else {
     NUM tmp = NUM_sqrt(f->BETTA + f->norma) * SIGN(*err);
-
+    
     for (i =0; i<f->len; ++i)
       {
 	NUM x_i = CB_get_elem(f->sig, i);
 	f->coeff[i] += f->DELTA*(x_i/tmp);
+	fprintf(stderr, "delta %g\n", f->DELTA);
 			
       }
   }
@@ -117,10 +126,10 @@ rnlms_result rnlms_process(rnlms_data_hnd rnlms_hnd,
   for(i=0; i<size; i++, x_arr++, y_arr++, err_out++)
     {
       NUM far_, near_, err_, out_; 
-      far_=*x_arr;
-      near_=*y_arr;
+      far_= *x_arr;
+      near_= *y_arr;
       rnlms_func(rnlms_hnd, far_, near_, &err_, &out_);
-      *err_out=err_;
+      *err_out=err_ ;
     }
   return E_NO_ERROR;
 }
