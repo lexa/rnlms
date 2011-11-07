@@ -20,12 +20,16 @@ void convert_from##_##NAME(srcType srcArr, dstType dstArr, size_t len)\
 GENERATE_FUNC_convert_ARR_declaration(const NUM*, int16_t*, NUM_to_int16)
 GENERATE_FUNC_convert_ARR_declaration(const int16_t*, NUM*, int16_to_NUM)
 
-/* NUM MIN(NUM a, NUM b); */
-/* size_t MIN_size_t(size_t a, size_t b); */
 
-#define MIN(a, b) ((a<b)?a:b);
+#define MIN(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+       __typeof__ (b) _b = (b); \
+     _a < _b ? _a : _b; })
 
-/* NUM SIGN(NUM a); */
+
+/* #define MIN(a, b) ((a<b)?a:b); */
+
+
 
 #define SIGN(a) ((a<0)?-1:1);
 

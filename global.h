@@ -11,8 +11,8 @@ typedef float NUM;
 #define NUM_abs(x) fabsf(x)
 #define NUM_sqrt(x) sqrtf(x)
 
-NUM sqr (NUM n);
-NUM my_sqrtf (NUM n);
+NUM SQR (NUM n);
+NUM NUM_sqrtf (NUM n);
 
 
 #endif /* _GLOBAL_H_ */

@@ -102,7 +102,7 @@ int main()
   rnlms_data_hnd filterStruct = malloc(sizeof_rnlms(FILTER_LEN)); 
   assert(NULL != filterStruct);
 
-  rnlms_init_struct(filterStruct, 1, .3f, 0.9, FILTER_LEN);
+  rnlms_init_struct(filterStruct, 0.00000000000000001, .01f, 0.99, FILTER_LEN);
 
   //  rnlms_set_options(filterStruct, OPT_INHIBIT_ADAPTATION);
   

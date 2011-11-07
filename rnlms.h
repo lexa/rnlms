@@ -11,26 +11,22 @@
 #include "CircularBuffer.h"
 #include "rnlms_interface.h"
 
-/*структура не должна торчать наружу*/
+/*структура филтр*/
 struct rnlms_data
 {
   NUM BETTA;
   NUM DELTA;
   NUM norma;
-  NUM MEMORY_FACTOR;
-  size_t len;
+  NUM MEMORY_FACTOR; //в книге обозначена как α
+  size_t len; 
   rnlms_options opt;
-  /*	NUM *sig;*/
-  CB* sig; /*после инициализации кольцевой буффер лежит после коэффициентов*/
-  NUM *coeff;
+  CB* sig; /*кольцевой буфер для хранения послежних len отсчётов входного сигнала*/
+  NUM *coeff; /*коэффициенты фильтра*/
   
 }  ;
 
-/*вычисляет X*X'*/
-NUM calc_norma (const NUM *A, size_t len);
-void insert_right(NUM *arr, NUM val, size_t len);
 NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output);
 
-#define UNUSED(x) (void)(x)
+/* #define UNUSED(x) (void)(x) */
 
 #endif /* _RNLMS_H_ */

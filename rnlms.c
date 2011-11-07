@@ -1,11 +1,5 @@
 #include "rnlms.h"
 
-/*#define MEMORY_FACTOR 0.999*/
-
-
-
-
-
 size_t sizeof_rnlms(size_t filter_len)
 {
   return sizeof(struct rnlms_data) + \
@@ -13,17 +7,19 @@ size_t sizeof_rnlms(size_t filter_len)
     (CB_size(filter_len)) ;
 }
 
-/*инициализирует структуру для фильтра, по уже выделенной памяти*/
+/*
+инициализирует структуру для фильтра, по уже выделенной памяти
+*/
 rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len)
 {
   struct rnlms_data* rez = mem;
-
+  
   if (MEMORY_FACTOR <= 0.0 || MEMORY_FACTOR >= 1.0)
     {
       fprintf(stderr, "MEMORY_FACTOR must be benween 0 and 1\n");
       return E_BAD_MAIN_DATA;
     }
-
+  
   rez->len = filter_len;
   rez->BETTA = BETTA;
   rez->DELTA = DELTA;
@@ -38,83 +34,38 @@ rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM BETTA, NUM DELTA, NUM MEM
 }
 
 
-/*вычисляет X*X'*/
-NUM calc_norma (const NUM *A, size_t len)
-{
-  NUM tmp = 0.0;
-  size_t i = 0;
-
-  for (; i < len; ++i)
-    {
-      tmp += sqr(A[i]);
-    }
-  /*	return sqrt(tmp);*/
-  return tmp;
-}
-
-
-void insert_right(NUM *arr, NUM val, size_t len)
-{
-  size_t i;
-  for (i = len-1; i > 0; --i)
-    {
-      arr[i] = arr[i-1];
-    }
-  arr[0]=val;
-}
-
-NUM MIN_f(NUM a, NUM b)
-{
-    return (a<b)?a:b;
-}
-
-NUM SIGN_f(NUM a)
-{
-    return (a<0)?-1.0:1.0;
-}
-
-/*выполняет для адаптацию*/
+/*
+Обрабатывает один отсчёт сигнала:
+1) расчитывает выход фильтра
+2) адаптирует коэффициенты фильтра
+*/
 NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
 {
   size_t i;
 
-  /*	NUM norma = convolution_CB_and_CB(f->sig, f->sig); */
-  f->norma += sqr(near_) - sqr(CB_get_first_elem(f->sig)) ;
 
-  /* fprintf(stderr, "%g | %g\n", CB_get_first_elem(f->sig), CB_get_elem(f->sig, f->sig->len));  */
-  /* assert (CB_get_first_elem(f->sig) == CB_get_elem(f->sig, f->sig->len)); */
+  f->norma += SQR(near_) - SQR(CB_get_first_elem(f->sig)) ;//  f->norma == X*X' 
 
   CB_push_elem(f->sig, near_);
 
-  /* *output = filter_output(f); */
-  *output = convolution_CB_and_vector(f->sig, f->coeff);
-  *err = far_ - *output;
+  *output = convolution_CB_and_vector(f->sig, f->coeff); //выход фильтра 
+  *err = far_ - *output; 
 
-  /*	fprintf(stderr, "%g\n", f->DELTA);*/
   
   if (f->opt & OPT_INHIBIT_ADAPTATION)
     return *err;
 
-  /* if ((NUM_abs(*err)/NUM_sqrt(f->norma)) < f->DELTA) */
+  NUM MU = MIN(NUM_sqrt(f->DELTA)/(NUM_abs(*err)/NUM_sqrt(f->norma)), 1.0); 
 
   for (i =0; i<f->len; ++i)
     {
       NUM x_i = CB_get_elem(f->sig, i);
-      //      f->coeff[i] += (MIN_f (NUM_abs(*err)/(f->BETTA+NUM_sqrt(f->norma)), f->DELTA)) * (SIGN_f (*err)) * (x_i/(f->BETTA+NUM_sqrt(f->norma))); 
-      NUM MU=0.4;
-      /* MU = MIN_f(f->DELTA/(NUM_abs(*err/32000)/f->norma), 1); */
-      /* f->coeff[i] += (*err)*(x_i/(f->BETTA+f->norma))*MU;  */
 
-      MU = MIN_f(NUM_sqrt(f->DELTA)/(NUM_abs(*err)/NUM_sqrt(f->norma)), 1.0);
       f->coeff[i] += (*err)*(x_i/(f->BETTA+f->norma))*MU;
     }
 
-  f->DELTA = f->MEMORY_FACTOR * f->DELTA + (1 - (f->MEMORY_FACTOR)) * MIN(sqr(*err)/(f->norma), f->DELTA);
-	
+  f->DELTA = f->MEMORY_FACTOR * f->DELTA + (1 - (f->MEMORY_FACTOR)) * MIN(SQR(*err)/(f->BETTA + f->norma), f->DELTA);
 
-  /*	printf("\n");*/
-  /* printf("%g %g %g\n", f->coeff[0], f->coeff[f->len/2], f->coeff[f->len-1]); */
-  /* printf("%g %g %g\n", f->sig[0], f->sig[f->len/2], f->sig[f->len-1]); */
   return *err;
 }
 
@@ -136,39 +87,13 @@ rnlms_result rnlms_process(rnlms_data_hnd rnlms_hnd,
   return E_NO_ERROR;
 }
 
-/* просто LMS */
-/* NUM rnlms_func(void *f_, NUM far_, NUM near_, NUM *err, NUM *output) */
-/* { */
-/* 	SimpleIIRFilter *f = f_; */
-	
-/* 	int i; */
 
-/* 	f->norma += sqr(far_) - sqr(CB_get_first_elem(f->sig)) ; */
-
-/* 	CB_push_elem(f->sig, far_); */
-
-
-/* 	*output = convolution_CB_and_vector(f->sig, f->coeff); */
-/* 	*err = near_ - *output; */
-
-/* 	NUM tmp = f->BETTA+f->norma; */
-/* 	for (i =0; i<f->len; ++i) */
-/* 	  { */
-/* 	    NUM x_i = CB_get_elem(f->sig, i); */
-/* 	    f->coeff[i] += (*err)*(x_i/tmp); */
-/* 	  } */
-
-	
-
-/* 	return *err; */
-/* } */
-
-
-
+/*
+Инициализирует коэффициенты фильтра, не меня его настроек
+*/
 rnlms_result rnlms_clean_buff(rnlms_data_hnd rez)
 {
   size_t i;
-  memset(rez->coeff, 0, sizeof(NUM)*(rez->len));
   rez->sig = CB_init(&(rez->coeff[rez->len]), rez->len);
 
   i = 0;
@@ -179,17 +104,6 @@ rnlms_result rnlms_clean_buff(rnlms_data_hnd rez)
   return E_NO_ERROR;
   
 }
-
-/* size_t sizeof_rnlms_2(float BETTA, float DELTA, float MEMORY_FACTOR, size_t filter_len) */
-/* //size_t sizeof_rnlms_2(float, float, float, size_t filter_len) */
-/* { */
-/*   UNUSED(BETTA); */
-/*   UNUSED(DELTA); */
-/*   UNUSED(MEMORY_FACTOR); */
-
-/*   return sizeof_rnlms(filter_len); */
-/* } */
-
 
 rnlms_options rnlms_get_options(const rnlms_data_hnd mem)
 {

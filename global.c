@@ -1,12 +1,12 @@
 #include "global.h"
 
 
-NUM sqr (NUM n)
+ NUM SQR (NUM n)
 {
 	return (n*n);
 }
 
-NUM my_sqrtf (NUM n)
+NUM NUM_sqrtf (NUM n)
 {
 	assert (n >= 0); 
 	return sqrtf(n);
