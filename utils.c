@@ -18,5 +18,5 @@
 /*   return (a<b)?a:b; */
 /* } */
 
-GENERATE_FUNC_convert_ARR_definition(const NUM*, int16_t*, NUM_to_int16)
-GENERATE_FUNC_convert_ARR_definition(const int16_t*, NUM*, int16_to_NUM)
+/* GENERATE_FUNC_convert_ARR_definition(const NUM*, int16_t*, NUM_to_int16) */
+/* GENERATE_FUNC_convert_ARR_definition(const int16_t*, NUM*, int16_to_NUM) */

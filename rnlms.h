@@ -11,7 +11,7 @@
 #include "CircularBuffer.h"
 #include "rnlms_interface.h"
 
-/*структура филтр*/
+/*структура фильтра*/
 struct rnlms_data
 {
   NUM BETTA;

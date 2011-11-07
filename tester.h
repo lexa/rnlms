@@ -10,5 +10,5 @@
 #include "utils.h"
 
 
-#define FRAME_SIZE   80
+#define FRAME_SIZE   8000
 #define FILTER_LEN   500
