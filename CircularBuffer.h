@@ -35,4 +35,6 @@ void CB_push_elem(CB * const buf, NUM elem);
 NUM CB_get_elem(const CB * const buf, size_t pos);
 NUM CB_get_first_elem(const CB * const buf);
 
+NUM CB_mediana(const CB *buf);
+
 #endif /* CIRCULARBUFFER_H_ */

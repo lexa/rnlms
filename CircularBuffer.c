@@ -118,3 +118,30 @@ CB_get_first_elem(const CB * const buf)
 {
   return buf->data[buf->begin];
 }
+
+int 
+compare_NUM (const void * a, const void * b);
+
+/*
+Находит медиану среди значений буфера
+
+Медиа́на (50-й процентиль, квантиль 0,5) — возможное значение признака, которое делит ранжированную совокупность (вариационный ряд выборки) на две равные части: 50 % «нижних» единиц ряда данных будут иметь значение признака не больше, чем медиана, а «верхние» 50 % — значения признака не меньше, чем медиана.
+ */
+
+//FIXME неэффективно, переделать
+
+NUM 
+CB_mediana(const CB* buf)
+{
+  NUM tmp[buf->len];
+  memcpy(tmp, buf->data, buf->len * sizeof(NUM));
+
+  qsort (tmp, buf->len, sizeof(NUM), compare_NUM);
+  return tmp[buf->len/2];
+}
+
+int 
+compare_NUM (const void * a, const void * b)
+{
+  return ( *(NUM*)a - *(NUM*)b );
+}
