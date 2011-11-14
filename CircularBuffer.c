@@ -90,7 +90,7 @@ CB_init(void* mem, size_t len)
   buf->len = len;
   buf->begin = 0;
   buf->data = (NUM*)(buf+1); /*указатель на память после структуры*/
-  memset(buf->data, 0, sizeof(NUM)*buf->len);
+  //  memset(buf->data, 0, sizeof(NUM)*buf->len);
 
   
   for ( i = 0; i<buf->len; ++i)
@@ -137,6 +137,8 @@ CB_mediana(const CB* buf)
   memcpy(tmp, buf->data, buf->len * sizeof(NUM));
 
   qsort (tmp, buf->len, sizeof(NUM), compare_NUM);
+
+  //  fprintf(stderr, "%g %g %g\n", tmp[buf->len/2 -1 ], tmp[buf->len/2], tmp[buf->len/2 +1]);
   return tmp[buf->len/2];
 }
 

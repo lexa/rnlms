@@ -55,16 +55,27 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
   if (f->opt & OPT_INHIBIT_ADAPTATION)
     return *err;
 
-  NUM MU = MIN(NUM_sqrt(f->DELTA)/(NUM_abs(*err)/NUM_sqrt(f->norma)), 1.0); 
+  //  NUM MU = MIN(NUM_sqrt(f->DELTA)/(NUM_abs(*err)/NUM_sqrt(f->norma)), 1.0); 
 
+  
+  NUM Psi;
+
+  NUM mediana = CB_mediana(f->sig);
+
+  if (fabs(mediana) > *err)
+      Psi = *err;
+  else
+    Psi = mediana; 
+
+  
   for (i =0; i<f->len; ++i)
     {
       NUM x_i = CB_get_elem(f->sig, i);
 
-      f->coeff[i] += (*err)*(x_i/(f->BETTA+f->norma))*MU;
+      f->coeff[i] += Psi*(x_i/(f->BETTA+f->norma));
     }
 
-  f->DELTA = f->MEMORY_FACTOR * f->DELTA + (1 - (f->MEMORY_FACTOR)) * MIN(SQR(*err)/(f->BETTA + f->norma), f->DELTA);
+  //  f->DELTA = f->MEMORY_FACTOR * f->DELTA + (1 - (f->MEMORY_FACTOR)) * MIN(SQR(*err)/(f->BETTA + f->norma), f->DELTA);
 
   return *err;
 }
