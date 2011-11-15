@@ -10,21 +10,16 @@ size_t sizeof_rnlms(size_t filter_len)
 /*
 инициализирует структуру для фильтра, по уже выделенной памяти
 */
-rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM BETTA, NUM DELTA, NUM MEMORY_FACTOR, size_t filter_len)
+rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM ALPHA, NUM BETTA, size_t filter_len)
 {
   struct rnlms_data* rez = mem;
   
-  if (MEMORY_FACTOR <= 0.0 || MEMORY_FACTOR >= 1.0)
-    {
-      fprintf(stderr, "MEMORY_FACTOR must be benween 0 and 1\n");
-      return E_BAD_MAIN_DATA;
-    }
-  
+ 
   rez->len = filter_len;
+  rez->ALPHA = ALPHA;
   rez->BETTA = BETTA;
-  rez->DELTA = DELTA;
   rez->norma = 0.0; 
-  rez->MEMORY_FACTOR = MEMORY_FACTOR;
+  //  rez->MEMORY_FACTOR = MEMORY_FACTOR;
   rez->opt = 0;
   rez->coeff = (NUM*)(rez + 1);
 
@@ -62,10 +57,10 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
 
   NUM mediana = CB_mediana(f->sig);
 
-  if (fabs(mediana) > *err)
-      Psi = *err;
+  if (3 * fabs(mediana) > *err) //FIXME почему 3 ???
+    Psi = *err * (f->ALPHA);
   else
-    Psi = mediana; 
+    Psi = 0.5f * mediana * (f->ALPHA) * SIGN(*err); 
 
   
   for (i =0; i<f->len; ++i)

@@ -14,10 +14,9 @@
 /*структура фильтра*/
 struct rnlms_data
 {
+  NUM ALPHA;
   NUM BETTA;
-  NUM DELTA;
   NUM norma;
-  NUM MEMORY_FACTOR; //в книге обозначена как α
   size_t len; 
   rnlms_options opt;
   CB* sig; /*кольцевой буфер для хранения послежних len отсчётов входного сигнала*/

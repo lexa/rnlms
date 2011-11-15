@@ -25,7 +25,8 @@ size_t sizeof_rnlms(size_t filter_len);
 //size_t sizeof_rnlms_2(float BETTA, float DELTA, float MEMORY_FACTOR, size_t filter_len);
 
 /*инициализирует структуру филтра, по уже выделенной памяти, сама функция ничего не выделяет*/
-rnlms_result rnlms_init_struct(rnlms_data_hnd mem, float BETTA, float DELTA, float MEMORY_FACTOR, size_t filter_len);
+rnlms_result rnlms_init_struct(rnlms_data_hnd mem, float ALPHA, float BETTA, size_t filter_len);
+
 
 // process x_arr and y_arr, puts result into err_out buffer all the buffers are served by user
 rnlms_result rnlms_process(rnlms_data_hnd rnlms_data_hnd,
