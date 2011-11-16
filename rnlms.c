@@ -1,16 +1,17 @@
 #include "rnlms.h"
 
-size_t sizeof_rnlms(size_t filter_len)
+size_t sizeof_rnlms(size_t P, size_t filter_len)
 {
   return sizeof(struct rnlms_data) + \
     (sizeof(NUM)*filter_len) + \
-    (CB_size(filter_len)) ;
+    (CB_size(filter_len)) + 
+    (CB_size(P));
 }
 
 /*
 инициализирует структуру для фильтра, по уже выделенной памяти
 */
-rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM ALPHA, NUM BETTA, size_t filter_len)
+rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM ALPHA, NUM BETTA, size_t ERR_BUF_LEN, size_t filter_len)
 {
   struct rnlms_data* rez = mem;
   
@@ -18,13 +19,12 @@ rnlms_result rnlms_init_struct(rnlms_data_hnd mem, NUM ALPHA, NUM BETTA, size_t 
   rez->len = filter_len;
   rez->ALPHA = ALPHA;
   rez->BETTA = BETTA;
+  rez->ERR_BUF_LEN = ERR_BUF_LEN;
   rez->norma = 0.0; 
   //  rez->MEMORY_FACTOR = MEMORY_FACTOR;
   rez->opt = 0;
   rez->coeff = (NUM*)(rez + 1);
 
-  
-  
   return rnlms_clean_buff(mem);
 }
 
@@ -46,16 +46,15 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
   *output = convolution_CB_and_vector(f->sig, f->coeff); //выход фильтра 
   *err = far_ - *output; 
 
+  CB_push_elem(f->err_buf, *err);
   
   if (f->opt & OPT_INHIBIT_ADAPTATION)
     return *err;
 
-  //  NUM MU = MIN(NUM_sqrt(f->DELTA)/(NUM_abs(*err)/NUM_sqrt(f->norma)), 1.0); 
 
-  
   NUM Psi;
 
-  NUM mediana = CB_mediana(f->sig);
+  NUM mediana = CB_mediana(f->err_buf);
 
   if (3 * fabs(mediana) > *err) //FIXME почему 3 ???
     Psi = *err * (f->ALPHA);
@@ -100,13 +99,17 @@ rnlms_result rnlms_process(rnlms_data_hnd rnlms_hnd,
 rnlms_result rnlms_clean_buff(rnlms_data_hnd rez)
 {
   size_t i;
-  rez->sig = CB_init(&(rez->coeff[rez->len]), rez->len);
 
   i = 0;
   for (; i<rez->len; ++i)
     {
       rez->coeff[i] = 0.0;
     }
+
+  rez->sig = CB_init(&(rez->coeff[rez->len]), rez->len);
+
+  rez->err_buf = CB_init((char*)rez->sig + CB_size(rez->len), rez->ERR_BUF_LEN);
+
   return E_NO_ERROR;
   
 }

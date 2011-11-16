@@ -17,10 +17,12 @@ struct rnlms_data
   NUM ALPHA;
   NUM BETTA;
   NUM norma;
+  size_t ERR_BUF_LEN;
   size_t len; 
   rnlms_options opt;
-  CB* sig; /*кольцевой буфер для хранения послежних len отсчётов входного сигнала*/
   NUM *coeff; /*коэффициенты фильтра*/
+  CB* sig; /*кольцевой буфер для хранения послежних len отсчётов входного сигнала*/
+  CB* err_buf; /*последние значение ошибок*/
   
 }  ;
 

@@ -244,8 +244,7 @@
     (if (> required-level (signal-level err-signal))
         (printf "PASS: ~a~%" (signal-level err-signal))
         (printf "FAIL: ~a~%" (signal-level err-signal)))
-        
-    
+
     (list
      filter-params
      (find-thresold (signal->levels err-signal 100 400) required-level)
