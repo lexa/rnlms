@@ -10,13 +10,6 @@ TESTER_HEAD=tester.h utils.h
 
 all:main 
 
-# ${OBJS}: *.c *.h Makefile
-# 		$(CC) %.c %.h $(CFLAGS)
-
-# %.o: %.c 
-# 		$(CC) $%.c $%.h $(CFLAGS)
-
-
 $(OBJS): %.o: %.c %.h Makefile
 		$(CC) -c $(CFLAGS) $< -o $@
 
@@ -24,7 +17,7 @@ librnlms.so: $(HEAD) $(OBJS)
 		$(CC) -shared $(OBJS) $(CFLAGS) -o $@ -lm
 
 main: librnlms.so $(TESTER_OBJS)  $(TESTER_HEAD)
-		$(CC) $? -o $@ -I./ -lrnlms -L ./
+		$(CC)  $(TESTER_OBJS) -o $@ -I./ -lrnlms -L ./
 
 
 .PHONY: test
