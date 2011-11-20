@@ -76,7 +76,7 @@ void testAlgo(rnlms_data_hnd filterStruct,
       readedNums = MIN (t1,t2);
       
       //      printf("one block readed\n");
-      rnlms_process(filterStruct, far_arr, near_arr, err_arr, readedNums);
+//      rnlms_process(filterStruct, far_arr, near_arr, err_arr, readedNums);
       //printf("one block processed\n");
 	  
       /* /\*сохраняет обработанные данные*\/ */

@@ -46,6 +46,8 @@ compare_NUM (const void * a, const void * b)
 NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
 {
   size_t i;
+  NUM Psi;
+  NUM mediana;
 
 
   f->norma += SQR(near_) - SQR(CB_get_first_elem(f->sig)) ;//  f->norma == X*X' 
@@ -62,10 +64,9 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
     return *err;
 
 
-  NUM Psi;
 
   //  NUM mediana = CB_mediana(f->err_buf);
-  NUM mediana = MediatorMedian(f->err_buf);
+  mediana = MediatorMedian(f->err_buf);
 
   //  {
   //    NUM tmp[3];
