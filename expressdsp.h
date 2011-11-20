@@ -24,6 +24,7 @@ Int RNLMS_algInit(rnlms_data_hnd handler, const IALG_MemRec *, IALG_Handle, cons
 
 Int RNLMS_algFree(rnlms_data_hnd handler, IALG_MemRec memTab[])
 {
+  algAlloc(NULL, NULL, memTab); /* Fill the memTab struct */
 	memTab[0].base = &handle;
 }
 
