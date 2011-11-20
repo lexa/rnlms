@@ -1,17 +1,5 @@
 #include "tester.h"
 
-
-/* typedef NUM (*FunctionOfTwoArgs)(void* pFilter, NUM, NUM, NUM*, NUM*); */
-
-/* void testBlock(FunctionOfTwoArgs func, void  *filterStruct, const NUM *far_, const NUM *near_, NUM *err, NUM* output, size_t arrayLen) */
-/* { */
-/*   size_t i=0; */
-/*   for (; i< arrayLen; ++i) */
-/*     { */
-/*       func(filterStruct, far_[i], near_[i], &err[i], &output[i]); */
-/*     } */
-/* } */
-
 void testAlgo(rnlms_data_hnd filterStruct,
 	      const char *far__filename,
 	      const char *near__filename,
@@ -41,18 +29,9 @@ void testAlgo(rnlms_data_hnd filterStruct,
       fclose(near__file);
       fprintf(stderr, "can't open file\n"); return;
     }
-   /* if (NULL == (output_file = fopen(output_filename, "wb"))) */
-   /*   { */
-   /*     fclose(far__file); */
-   /*     fclose(near__file); */
-   /*     fclose(err_file); */
-   /*     fprintf(stderr, "can't open file\n"); return; */
-   /*   } */
-	
 
   while(!feof(far__file) && !feof(near__file))
     {
-      /*      int i;*/
       size_t  readedNums, t1, t2;
       int16_t far_arr[FRAME_SIZE];
       int16_t near_arr[FRAME_SIZE];
@@ -75,9 +54,9 @@ void testAlgo(rnlms_data_hnd filterStruct,
       
       readedNums = MIN (t1,t2);
       
-      //      printf("one block readed\n");
-//      rnlms_process(filterStruct, far_arr, near_arr, err_arr, readedNums);
-      //printf("one block processed\n");
+//      printf("one block readed\n");
+      rnlms_process(filterStruct, far_arr, near_arr, err_arr, readedNums);
+//      printf("one block processed\n");
 	  
       /* /\*сохраняет обработанные данные*\/ */
 
@@ -104,7 +83,6 @@ int main()
   assert(NULL != filterStruct);
 
   rnlms_init(filterStruct, 1.0, 0.00000001, P, FILTER_LEN);
-
   //  rnlms_set_options(filterStruct, OPT_INHIBIT_ADAPTATION);
   
   testAlgo(filterStruct,	       \
