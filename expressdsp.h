@@ -16,12 +16,9 @@ Int RNLMS_algAlloc(const IALG_Params *algParams, IALG_Fxns **pf, IALG_MemRec mem
 }
 
 
-
-
-Int RNLMS_algInit(rnlms_data_hnd handler, const IALG_MemRec *, IALG_Handle, const params *)
+Int RNLMS_algInit(rnlms_data_hnd handler, const IALG_MemRec *, IALG_Handle, const RNLMS_params *params)
 {
-
-  return (E_NO_ERROR == rnlms_result rnlms_init_struct(handler, 0.9, 0.00000001, 200, 200));
+  return (E_NO_ERROR == rnlms_init_by_struct(handler, params));
 }
 
 Int RNLMS_algFree(rnlms_data_hnd handler, IALG_MemRec memTab[])
