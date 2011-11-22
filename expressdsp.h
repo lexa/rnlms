@@ -2,7 +2,9 @@
 
 #include "rnlms_interface.h"
 
+
 //FIXME How much records in memRec ?
+//Answer: atleast one, more likely four
 Int RNLMS_algAlloc(const IALG_Params *algParams, IALG_Fxns **pf, IALG_MemRec memTab[])
 {
   memTab[0].size = sizeof_rnlms();
@@ -16,7 +18,7 @@ Int RNLMS_algAlloc(const IALG_Params *algParams, IALG_Fxns **pf, IALG_MemRec mem
 
 
 
-Int RNLMS_algInit(rnlms_data_hnd handler, const IALG_MemRec *, IALG_Handle, const IALG_Params *)
+Int RNLMS_algInit(rnlms_data_hnd handler, const IALG_MemRec *, IALG_Handle, const params *)
 {
 
   return (E_NO_ERROR == rnlms_result rnlms_init_struct(handler, 0.9, 0.00000001, 200, 200));
@@ -51,4 +53,4 @@ _RNLMS_XDSP Realisation_RNLMS_XDSP {
 	NULL
 } Realisation_RNLMS_XDSP;
 
-asm("_POINTER_TO_STRUCT" .set "Realisation_RNLMS_XDSP");
+asm('_POINTER_TO_STRUCT' .set 'Realisation_RNLMS_XDSP');
