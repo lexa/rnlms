@@ -7,6 +7,7 @@
 
 
 #include "global.h"
+#include "median.h"
 #include "utils.h"
 #include "CircularBuffer.h"
 #include "rnlms_interface.h"
@@ -14,15 +15,12 @@
 /*структура фильтра*/
 struct rnlms_data
 {
-  NUM ALPHA;
-  NUM BETTA;
-  NUM norma;
-  size_t ERR_BUF_LEN;
-  size_t len; 
+  RNLMS_params param;
   rnlms_options opt;
+  NUM norma;
   NUM *coeff; /*коэффициенты фильтра*/
   CB* sig; /*кольцевой буфер для хранения послежних len отсчётов входного сигнала*/
-  CB* err_buf; /*последние значение ошибок*/
+  Mediator *err_buf; 
   
 }  ;
 

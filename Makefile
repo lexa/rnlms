@@ -1,8 +1,8 @@
 CC=gcc
 CFLAGS=-Wall -std=gnu99 -O0 -ggdb -Wall -Wextra -Wformat=2 -pedantic -Winit-self -Wstrict-overflow=5 -Wcast-qual -Wcast-align -Wconversion -Waggregate-return  -fPIC
 # CFLAGS=-Wall -std=c99 -O0 -ggdb
-OBJS=rnlms.o  CircularBuffer.o global.o
-HEAD=global.h rnlms.h CircularBuffer.h rnlms_interface.h
+OBJS=rnlms.o  CircularBuffer.o global.o median.o
+HEAD=global.h rnlms.h CircularBuffer.h rnlms_interface.h median.h
 # BIN_FILES=$(wildcard g165/*.dat)
 # DAT_FILES=$(BIN_FILES=$:.dat=_ccs.dat)
 TESTER_OBJS=tester.c utils.c
@@ -17,7 +17,7 @@ librnlms.so: $(HEAD) $(OBJS)
 		$(CC) -shared $(OBJS) $(CFLAGS) -o $@ -lm
 
 main: librnlms.so $(TESTER_OBJS)  $(TESTER_HEAD)
-		$(CC)  $(TESTER_OBJS) -o $@ -I./ -lrnlms -L ./
+		$(CC)  $(TESTER_OBJS) -o $@ -I./ -lrnlms -L ./ $(CFLAGS)
 
 
 .PHONY: test

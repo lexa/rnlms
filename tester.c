@@ -99,11 +99,11 @@ void testAlgo(rnlms_data_hnd filterStruct,
 
 int main()
 {
-  size_t P = 2000;
+  size_t P = 200;
   rnlms_data_hnd filterStruct = malloc(sizeof_rnlms(P, FILTER_LEN));
   assert(NULL != filterStruct);
 
-  rnlms_init_struct(filterStruct, 1.0, 0.00000001, P, FILTER_LEN);
+  rnlms_init(filterStruct, 1.0, 0.00000001, P, FILTER_LEN);
 
   //  rnlms_set_options(filterStruct, OPT_INHIBIT_ADAPTATION);
   

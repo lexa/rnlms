@@ -130,20 +130,20 @@ compare_NUM (const void * a, const void * b);
 
 //FIXME неэффективно, переделать
 
-NUM 
-CB_mediana(const CB* buf)
-{
-  NUM tmp[buf->len];
-  memcpy(tmp, buf->data, buf->len * sizeof(NUM));
+/* NUM  */
+/* CB_mediana(const CB* buf) */
+/* { */
+/*   NUM tmp[buf->len]; */
+/*   memcpy(tmp, buf->data, buf->len * sizeof(NUM)); */
 
-  qsort (tmp, buf->len, sizeof(NUM), compare_NUM);
+/*   qsort (tmp, buf->len, sizeof(NUM), compare_NUM); */
 
-  //  fprintf(stderr, "%g %g %g\n", tmp[buf->len/2 -1 ], tmp[buf->len/2], tmp[buf->len/2 +1]);
-  return tmp[buf->len/2];
-}
+/*   //  fprintf(stderr, "%g %g %g\n", tmp[buf->len/2 -1 ], tmp[buf->len/2], tmp[buf->len/2 +1]); */
+/*   return tmp[buf->len/2]; */
+/* } */
 
-int 
-compare_NUM (const void * a, const void * b)
-{
-  return ( *(NUM*)a - *(NUM*)b );
-}
+/* int  */
+/* compare_NUM (const void * a, const void * b) */
+/* { */
+/*   return ( *(NUM*)a - *(NUM*)b ); */
+/* } */

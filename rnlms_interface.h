@@ -16,6 +16,13 @@ typedef enum RNLMS_Options{
   OPT_DISABLE_NONLINEAR_PROCESSING = 1>>1
 } rnlms_options;
 
+typedef struct _RNLMS_params {
+  NUM ALPHA;
+  NUM BETTA;
+  size_t ERR_BUF_LEN;
+  size_t len; 
+} RNLMS_params;
+
 // Handler for one RNLMS instance
 typedef struct rnlms_data* rnlms_data_hnd;
 
@@ -25,7 +32,8 @@ size_t sizeof_rnlms(size_t P, size_t filter_len);
 //size_t sizeof_rnlms_2(float BETTA, float DELTA, float MEMORY_FACTOR, size_t filter_len);
 
 /*инициализирует структуру филтра, по уже выделенной памяти, сама функция ничего не выделяет*/
-rnlms_result rnlms_init_struct(rnlms_data_hnd mem, float ALPHA, float BETTA, size_t ERR_BUF_LEN, size_t filter_len);
+rnlms_result rnlms_init(rnlms_data_hnd mem, float ALPHA, float BETTA, size_t ERR_BUF_LEN, size_t filter_len);
+rnlms_result rnlms_init_by_struct(rnlms_data_hnd mem, RNLMS_params p);
 
 
 // process x_arr and y_arr, puts result into err_out buffer all the buffers are served by user
