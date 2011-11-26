@@ -26,7 +26,7 @@
                            (loop (sub1 i) (+ sum (sqr (vector-ref signal (+ start i)))))))
                      len))))
 ;       90.30899870323904 ;; 90.30899870323904 == (signal-level #(32768))
-       83
+       83.11858286715683
        )))
 
 ;; (define (signal-level signal . optional-args)
@@ -161,11 +161,11 @@
 
 (define lib (ffi-lib "/home/lexa/develop/rnlms/librnlms.so"))
   
-(define c-rnlms-init-struct (get-ffi-obj "rnlms_init_struct" lib (_fun (data betta delta memory-factor filter-len) :: (data : _pointer) (betta : _num)(delta : _num) (memory-factor : _num) (filter-len : _size_t) -> _int)))
+(define c-rnlms-init-struct (get-ffi-obj "rnlms_init" lib (_fun (data alpha betta err-buf-len filter-len) :: (data : _pointer) (alpha : _num)(betta : _num) (err-buf-len : _size_t) (filter-len : _size_t) -> _int)))
 
 (define c-rnlms-process (get-ffi-obj "rnlms_process" lib (_fun (hnd x_arr y_arr err_out size) :: (hnd : _pointer) (x_arr : _pointer) (y_arr : _pointer) (err_out : _pointer) (size : _size_t) -> _int)))
 
-(define c-sizeof-rnlms (get-ffi-obj "sizeof_rnlms" lib (_fun (filter-len) :: (filter-len : _size_t) -> _size_t)))
+(define c-sizeof-rnlms (get-ffi-obj "sizeof_rnlms" lib (_fun (P filter-len) :: (P : _size_t) (filter-len : _size_t) -> _size_t)))
 
 (define _rnlms_options (_bitmask '(OPT_INHIBIT_ADAPTATION = 1 OPT_DISABLE_NONLINEAR_PROCESSING = 2)))
 
@@ -175,12 +175,12 @@
 
 (define rnlms% (class object%
                  
-                 (init betta delta memory-factor filter-len)
+                 (init alpha betta P filter-len)
                  (super-new)
                  
                  (define filter-mem
-                   (let ([mem (malloc (c-sizeof-rnlms filter-len) )])
-                     (if (= (c-rnlms-init-struct mem betta delta memory-factor filter-len) 0)
+                   (let ([mem (malloc (c-sizeof-rnlms P filter-len) )])
+                     (if (= (c-rnlms-init-struct mem alpha betta P filter-len) 0)
                          mem
                          (error "error in init")
                      )))
@@ -286,12 +286,130 @@
           (printf "FAIL: ~a~%" combined-loss)))
     ))
 
-(for ([mem-factor '(0.95 0.9 0.99 0.999 0.9999 0.99999 0.999999 0.9999999)])
-     (let ([params (list 1.0 0.3 mem-factor 200)])
-       (printf "params: ~a~%" params)
-       (printf "g165-1  ")
-       (make-g165-1 -30 190 -6 -48 params)
-       (exit)
-       (printf "g165-2  ")
-       (make-g165-2 -20 130 -6 27 params)
-       ))
+;; (for ([mem-factor '(0.95 0.9 0.99 0.999 0.9999 0.99999 0.999999 0.9999999)])
+;;      (let ([params (list 1.0 0.3 mem-factor 200)])
+;;        (printf "params: ~a~%" params)
+;;        (printf "g165-1  ")
+;;        (make-g165-1 -30 190 -6 -48 params)
+;;        (exit)
+;;        (printf "g165-2  ")
+;;        (make-g165-2 -20 130 -6 27 params)
+;;        ))
+
+
+(define (make-con-test input-level delay-time echo-loss filter-params)
+  (let* ([R-in (generate-white-noise input-level)] ;;near
+         [S-in (vector-take (delay-signal (attenuate R-in echo-loss) delay-time) (vector-length R-in))  ] ;; far
+         [filter (apply make-object rnlms% filter-params)]
+         [err-signal (send filter process S-in R-in)]
+         [levels (signal->levels err-signal 10 400)])
+
+;;    (with-output-to-file (format "test_~a_~a_~a_~a.dat" input-level delay-time echo-loss  filter-params)
+    (with-output-to-file "test.dat"
+      #:mode 'text
+      #:exists 'replace
+      (lambda () (vector-map  displayln err-signal)))
+
+    (list
+     filter-params
+     (* 10 (find-thresold levels  (signal-level (vector-take err-signal (/ (vector-length err-signal) 4)))))
+     (signal-level err-signal)
+     (vector-ref levels (sub1 (vector-length levels)))
+     )
+    ))
+
+;(print (make-con-test -10 64 -10 '(0.1 0.00000001 65 65)))
+
+;; (for/list ([filter-len '(64 128 256 512)])
+;;           (for/list ([buf-len '(64 128 256 512)])
+;;                     (for/list ([alpha '(0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3)])
+;;                               (displayln (make-con-test -10 filter-len -10 (list alpha 0.00000001 buf-len (add1 filter-len)))))))
+
+(define (main)
+  (for/list ([filter-len '(64 128 256 512)])
+            (for/list ([buf-len '(64 128 256 512)])
+                      (with-output-to-file (format "buf_~a_filt_~a.dat" buf-len filter-len)
+                        #:mode 'text
+                        #:exists 'replace
+                        (lambda ()
+                          (for/list ([alpha '(0.01 0.05 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3)])
+                                    (displayln (make-con-test -10 filter-len -10 (list alpha 0.00000001 buf-len (add1 filter-len)))
+                                               )))))))
+;(main)
+
+;; (let ([buf-len 512])
+;;   (for/list ([alpha '(0.1 0.5 0.9 1.0 1.1 1.3)])
+;;             (with-output-to-file (format "alpha_~a_buf_~a.dat" alpha buf-len)
+;;               #:mode 'text
+;;               #:exists 'replace
+;;               (lambda ()
+;;                 (for/list ([filter-len '(64 128 256 512 1024)])
+;;                           (displayln (make-con-test -10 filter-len -10 (list alpha 0.00000001 buf-len (add1 filter-len)))
+;;                                      ))))))
+
+
+
+(define (read-dat-file filename)
+  (let ([file (open-input-file filename #:mode 'binary)]
+         [data (make-vector (/ (file-size filename) 2))])
+    (let loop ([i 0])
+      (let ([num (read-bytes 2 file)])
+        (when (not (eof-object? num))
+          (begin
+            (bytes->int num)
+            (vector-set! data i (bytes->int num))
+            (loop (add1 i))))))
+    
+    (close-input-port file)
+    data
+    ))
+
+(define (test-residual-echo-level input-level echo-path-len adaptation-time filter-params)
+  (let*  ([near (read-dat-file (format "g165/filtered_noise_~a.dat" input-level))]
+         [far (read-dat-file (format "g165/echo_~a_~a.dat" input-level echo-path-len))]
+         [filter (apply make-object rnlms% filter-params)]
+;;         [err-signal (send filter process far near )]
+         [adaptation-signal (send filter process (vector-take far adaptation-time) (vector-take  near adaptation-time))])
+
+    (send filter set-options 'OPT_INHIBIT_ADAPTATION)
+    (let ([residual-signal (send filter process (vector-drop far adaptation-time) (vector-drop  near adaptation-time))])
+      
+      (with-output-to-file "test.dat"
+        #:mode 'text
+        #:exists 'replace
+        (lambda ()
+          (vector-map  displayln adaptation-signal)
+          (vector-map  displayln residual-signal)
+          ))
+      (signal-level residual-signal)
+      )))
+  
+;(displayln (signal-level (read-dat-file (format "g165/filtered_noise_~a.dat" 20))))
+(for/list ([alpha '(0.095 0.45 0.9)]
+           [filter-len '(128 512 1024)])
+
+          (for/list ([input-level '(10 20 30)])
+                    (test-residual-echo-level input-level filter-len 16000 (list alpha 0.00000001 300 filter-len))))
+
+
+;; (define (test-residual-echo-level input-level delay-time echo-loss filter)
+;;   (let* ([near (read-dat-file (format "g165/filtered_noise_~a.dat" 10))] ;;near
+;;          [far (read-dat-file (format "g165/echo_~a_~a.dat" 10 128))  ] ;; far
+;; ;         [filter (apply make-object rnlms% filter-params)]
+;;          [err-signal (send filter process far near)]
+;;          [levels (signal->levels err-signal 10 400)])
+
+;; ;;    (with-output-to-file (format "test_~a_~a_~a_~a.dat" input-level delay-time echo-loss  filter-params)
+;;     (with-output-to-file "test.dat"
+;;       #:mode 'text
+;;       #:exists 'replace
+;;       (lambda () (vector-map  displayln err-signal)))
+
+;;     (list
+;;      (* 10 (find-thresold levels  (signal-level (vector-take err-signal (/ (vector-length err-signal) 4)))))
+;;      (signal-level err-signal)
+;;      (vector-ref levels (sub1 (vector-length levels)))
+;;      )
+;;     ))
+
+;;(print (test-residual-echo-level -10 64 -10 (make-object rnlms% 0.1 0.00000001 65 65)))

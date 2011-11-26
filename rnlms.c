@@ -48,8 +48,8 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
   size_t i;
   NUM Psi;
   NUM mediana;
-
-
+  
+  
   f->norma += SQR(near_) - SQR(CB_get_first_elem(f->sig)) ;//  f->norma == X*X' 
 
   CB_push_elem(f->sig, near_);

@@ -91,7 +91,7 @@ size_t Mediator_sizeof(size_t nItems)
  
 //creates new Mediator: to calculate `nItems` running median. 
 //mallocs single block of memory, caller must free.
-Mediator* MediatorNew(void *mem, size_t nItems)
+Mediator* MediatorNew(void *mem, size_t nItems, NUM filler)
 {
   //Mediator* m=  malloc(Mediator_sizeof(nItems));
   Mediator *m=mem;
@@ -100,10 +100,17 @@ Mediator* MediatorNew(void *mem, size_t nItems)
   m->heap = m->pos+nItems + (nItems/2); //points to middle of storage.
   m->N=nItems;
   m->ct = m->idx = 0;
+  /* while (nItems--)  //set up initial heap fill pattern: median,max,min,max,... */
+  /*   {  m->pos[nItems]= ((nItems+1)/2) * ((nItems&1)?-1:1); */
+  /*     m->heap[m->pos[nItems]]=nItems; */
+  /*   } */
+  
   while (nItems--)  //set up initial heap fill pattern: median,max,min,max,...
-    {  m->pos[nItems]= ((nItems+1)/2) * ((nItems&1)?-1:1);
-      m->heap[m->pos[nItems]]=nItems;
+    {  
+      m->pos[nItems]= ((nItems+1)/2) * ((nItems&1)?-1:1);
+      m->heap[m->pos[nItems]]=filler;
     }
+
   return m;
 }
  
