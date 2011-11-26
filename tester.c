@@ -78,8 +78,10 @@ void testAlgo(rnlms_data_hnd filterStruct,
 
 int main()
 {
-  size_t P = 200;
+  size_t P = 300;
+
   rnlms_data_hnd filterStruct = malloc(sizeof_rnlms(P, FILTER_LEN));
+  
   assert(NULL != filterStruct);
 
   rnlms_init(filterStruct, 1.0, 0.00000001, P, FILTER_LEN);
