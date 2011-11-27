@@ -76,15 +76,15 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
   //    fprintf(stderr, "%f %f\n", *err,  mediana);
   //  }
 
-  if (3 * fabs(mediana) > *err) //FIXME почему 3 ???
+  if (3 * NUM_abs(mediana) > *err) //FIXME почему 3 ???
     Psi = *err * (f->param.ALPHA);
   else
     Psi = 0.5f * mediana * (f->param.ALPHA) * SIGN(*err); 
 
 
-  NUM tmp = Psi/(f->param.BETTA+f->norma);
+//  NUM tmp = Psi/(f->param.BETTA+f->norma);
 
-  CB_multiple_and_add(f->sig, tmp, &(f->coeff));
+  CB_multiple_and_add(f->sig, Psi/(f->param.BETTA+f->norma), &(f->coeff));
   
   /* for (i =0; i<f->param.len; ++i) */
   /*   { */
