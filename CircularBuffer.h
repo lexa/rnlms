@@ -37,4 +37,7 @@ NUM CB_get_first_elem(const CB * const buf);
 
 //NUM CB_mediana(const CB *buf);
 
+//ugly function
+void CB_multiple_and_add(const CB *cb, NUM mul, NUM **arr);
+
 #endif /* CIRCULARBUFFER_H_ */
