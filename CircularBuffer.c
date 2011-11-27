@@ -147,3 +147,18 @@ compare_NUM (const void * a, const void * b);
 /* { */
 /*   return ( *(NUM*)a - *(NUM*)b ); */
 /* } */
+
+
+void CB_multiple_and_add(const CB *cb, NUM mul, NUM *arr[])
+{
+  size_t i;
+  for (i=0; i < cb->len - cb->begin; i++)
+    {
+      (*arr)[i] += mul * cb->data[i+cb->begin] ;
+    }
+
+  for (i=0; i < cb->begin; i++)
+    {
+      (*arr)[i + cb->len - cb->begin] += mul * cb->data[i] ;
+    }
+}

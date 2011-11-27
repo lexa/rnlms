@@ -31,11 +31,11 @@ rnlms_result rnlms_init(rnlms_data_hnd mem, NUM ALPHA, NUM BETTA, size_t ERR_BUF
   return rnlms_clean_buff(mem);
 }
 
-int
-compare_NUM (const void * a, const void * b)
-{
-  return ( *(NUM*)a - *(NUM*)b );
-}
+/* int */
+/* compare_NUM (const void * a, const void * b) */
+/* { */
+/*   return ( *(NUM*)a - *(NUM*)b ); */
+/* } */
 
 
 /*
@@ -45,7 +45,7 @@ compare_NUM (const void * a, const void * b)
 */
 NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
 {
-  size_t i;
+  //  size_t i;
   NUM Psi;
   NUM mediana;
   
@@ -80,13 +80,16 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
   else
     Psi = 0.5f * mediana * (f->param.ALPHA) * SIGN(*err); 
 
-  
-  for (i =0; i<f->param.len; ++i)
-    {
-      NUM x_i = CB_get_elem(f->sig, i);
 
-      f->coeff[i] += Psi*(x_i/(f->param.BETTA+f->norma));
-    }
+  NUM tmp = Psi/(f->param.BETTA+f->norma);
+
+  CB_multiple_and_add(f->sig, tmp, &(f->coeff));
+  
+  /* for (i =0; i<f->param.len; ++i) */
+  /*   { */
+  /*     NUM x_i = CB_get_elem(f->sig, i); */
+  /*     f->coeff[i] += Psi*(x_i/(f->param.BETTA+f->norma)); */
+  /*   } */
 
   //  f->DELTA = f->MEMORY_FACTOR * f->DELTA + (1 - (f->MEMORY_FACTOR)) * MIN(SQR(*err)/(f->BETTA + f->norma), f->DELTA);
 
