@@ -57,11 +57,12 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
   *output = convolution_CB_and_vector(f->sig, f->coeff); //выход фильтра 
   *err = far_ - *output; 
 
+  if (f->opt & OPT_INHIBIT_ADAPTATION)
+    return *err;
+
   //CB_push_elem(f->err_buf, *err);
   MediatorInsert(f->err_buf, *err);
   
-  if (f->opt & OPT_INHIBIT_ADAPTATION)
-    return *err;
 
 
 
