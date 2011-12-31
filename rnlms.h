@@ -26,6 +26,8 @@ struct rnlms_data
 
 NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output);
 
+void rnlms_show_debug(rnlms_data_hnd mem);
+
 /* #define UNUSED(x) (void)(x) */
 
 #endif /* _RNLMS_H_ */

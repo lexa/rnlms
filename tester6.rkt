@@ -88,7 +88,7 @@
     mem
     ))
 
-т(define (mem->vector mem type len)
+(define (mem->vector mem type len)
   (let ([ret (make-vector  len)])
     (let loop ([i 0])
       (if (< i len)
@@ -114,6 +114,65 @@
     (close-input-port file)
     data
     ))
+
+
+(define mi (list
+            (vector -436   -829   -2797  -4208  -17968 -11215 46150  34480  -10427 9049   -1309  -6320  390     -8191   -1751   -6051   -3796   -4055 -3948  -2557  -3372  -1808  -2259  -1300  -1098 -618 -340 -61  323  419   745    716    946    880    1014   976  1033  1091  1053  1042  794   831  899   716   390   313   304   304  73   -119  -109  -176  -359  -407 -512  -580  -704  -618  -685 -791 -772 -820 -839 -724)))
+
+
+
+(define (make-echo-answer signal model echo-delay ERL K)
+
+  (define (m i)
+    (let ([impulse-response (list-ref mi model)])
+      (if (>= (vector-length impulse-response) i)
+          (vector-ref impulse-response i)
+          0)
+    ))
+  
+  (define (g val)
+    (* (expt 10 (/ (- ERL) 20)) K val)
+;;    val
+    )
+
+  (define (generate-impulse-response )
+    
+    (let* ([impulse-response (list-ref mi model)]
+           [rez (make-vector (+ (vector-length impulse-response) echo-delay) 0)])      
+      (vector-copy! rez echo-delay (vector-map g impulse-response))
+      rez
+      ))
+
+  (define (filter-out impulse-response signal)
+    (let ([len (vector-length impulse-response)])
+    (do ([i 0 (add1 i)]
+         [sum 0 (+ sum (* (vector-ref impulse-response (- len i 1)) (vector-ref signal i)))]
+         )
+        ((>= i len) sum)
+      )))
+  
+  (define (vector-window vec begin len)
+    (let ([rez (make-vector len 0)])
+      (vector-copy! rez 0 vec begin (min (+ begin len) (vector-length vec)))
+      rez
+      ))
+  
+  (define (filter signal impulse-response)
+    (let ([rez (make-vector (vector-length signal))])
+      (do ([b 0 (add1 b)])
+        ((>= b (vector-length signal)))
+        
+       (vector-set! rez b (filter-out impulse-response (vector-window signal b (vector-length impulse-response))))
+      )
+      rez
+      )
+    )
+  ;(print (generate-impulse-response))
+  
+  (vector-map round (filter signal (generate-impulse-response)))
+  
+  )
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;test-generic;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; (define test-interface (interface () get-test-data check-test-results))
@@ -154,6 +213,7 @@
 (define _rnlms_options (_bitmask '(OPT_INHIBIT_ADAPTATION = 1 OPT_DISABLE_NONLINEAR_PROCESSING = 2)))
 
 (define c-rnlms-set-options (get-ffi-obj "rnlms_set_options" lib (_fun (mem options) :: (mem : _pointer) (options : _rnlms_options) -> _int)))
+(define c-rnlms-show-debug (get-ffi-obj "rnlms_show_debug" lib (_fun (mem) :: (mem : _pointer) -> _void)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;testing-algo;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -181,17 +241,19 @@
                           [err-out-mem (malloc _int16 len )])
                      (c-rnlms-process filter-mem (vector->mem far _int16) (vector->mem near _int16) err-out-mem len)
                      (mem->vector err-out-mem _int16 len))
-                   )))
+                   )
+                 (define/public (debug-info)
+                   (c-rnlms-show-debug filter-mem)
+                   )
+                 ))
                  
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;g165-1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define signal
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;g165-1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (make-g165-1 input-level delay-time adaptation-time filter-params)
+(define (make-g165-1 input-level delay-time adaptation-time ERL K filter-params)
   (let*  ([R-in (read-dat-file (format "g165/filtered_noise_~a.dat" input-level))]
-          [S-in (read-dat-file (format "g165/echo_~a_~a.dat" input-level delay-time))]
+;          [S-in (read-dat-file (format "g165/echo_~a_~a.dat" input-level delay-time))]
+          [S-in (make-echo-answer R-in 0 delay-time ERL K)]
           [filter (apply make-object rnlms% filter-params)]
           [adaptation-signal (send filter process (vector-take S-in adaptation-time) (vector-take R-in adaptation-time))])
 
@@ -202,17 +264,20 @@
         #:mode 'text
         #:exists 'replace
         (lambda ()
-          (vector-map  displayln adaptation-signal)
-          (vector-map  displayln residual-signal)
+;          (vector-map  displayln adaptation-signal)
+ ;         (vector-map  displayln residual-signal)
+          (vector-map  displayln S-in)
           ))
       (signal-level residual-signal)
       )))
 
-(displayln "g165 - 1")
-(for/list ([filter-len '(128 512 1024 1024)]
-           [alpha '(0.095 0.45 0.9 0.39)])
-          (for/list ([l '(10 15 20 25 30)])
-                    (make-g165-1 l filter-len 40000 (list alpha 0.00000001 300 filter-len))))
+;(displayln "g165 - 1")
+;(make-g165-1 10 256 40000 800 10 (list 0.45 0.00000001 300 512))
+
+;; (for/list ([filter-len '(128 512 1024 1024)]
+;;            [alpha '(0.095 0.45 0.9 0.39)])
+;;           (for/list ([l '(10 15 20 25 30)])
+;;                     (make-g165-1 l filter-len 40000 (list alpha 0.00000001 300 filter-len))))
 
 
 
@@ -322,3 +387,20 @@
           
 ;;           (for/list ([l '(10 15 20 25 30)])
 ;;                     (make-g165-5 l filter-len (list alpha 0.00000001 300 filter-len))))
+
+
+
+(let* ([R-in (read-dat-file "echo-in.dat" )] ;;near
+       [S-in (read-dat-file "echo-out.dat" )] ;; far
+       [len (vector-length R-in)]
+       [filter (apply make-object rnlms% (list 0.4 0.00000001 300 512))]
+       [err-signal (send filter process (vector-take R-in 80000) (vector-take S-in 80000))])
+  
+  (with-output-to-file "test.dat"
+    #:mode 'text
+    #:exists 'replace
+    (lambda ()
+      (vector-map  displayln err-signal)
+      ))
+  (send filter debug-info)
+  )

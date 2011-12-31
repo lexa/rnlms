@@ -148,3 +148,12 @@ rnlms_result rnlms_set_options(rnlms_data_hnd mem, rnlms_options new_opt)
   mem->opt = new_opt;
   return E_NO_ERROR;
 }
+
+void rnlms_show_debug(rnlms_data_hnd mem)
+{
+  for (unsigned int i=0; i<mem->param.len; i++)
+    {
+      printf("%g ", mem->coeff[i]);
+    }
+  printf("\n");
+}

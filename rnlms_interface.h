@@ -13,7 +13,7 @@ typedef enum RNLMS_Result{
 
 typedef enum RNLMS_Options{
   OPT_INHIBIT_ADAPTATION = 1,
-  OPT_DISABLE_NONLINEAR_PROCESSING = 1>>1
+  OPT_DISABLE_NONLINEAR_PROCESSING = 1<<1
 } rnlms_options;
 
 typedef struct _RNLMS_params {
