@@ -21,7 +21,7 @@ rnlms_result rnlms_init_by_struct(rnlms_data_hnd mem, RNLMS_params p)
   return rnlms_clean_buff(mem);
 }
 
-rnlms_result rnlms_init(rnlms_data_hnd mem, NUM ALPHA, NUM BETTA, size_t ERR_BUF_LEN, size_t filter_len)
+rnlms_result rnlms_init(rnlms_data_hnd mem, NUM ALPHA, NUM BETTA, size_t ERR_BUF_LEN, size_t filter_len, NUM NLP_thresold)
 {
   struct rnlms_data* rez = mem;
   
@@ -33,6 +33,7 @@ rnlms_result rnlms_init(rnlms_data_hnd mem, NUM ALPHA, NUM BETTA, size_t ERR_BUF
   rez->param.ALPHA = ALPHA;
   rez->param.BETTA = BETTA;
   rez->param.ERR_BUF_LEN = ERR_BUF_LEN;
+  rez->param.NLP_thresold=NLP_thresold;
   rez->norma = 0.0; 
   rez->opt = 0;
   rez->coeff = (NUM*)(rez + 1);
@@ -112,8 +113,8 @@ NUM rnlms_func(rnlms_data_hnd f, NUM far_, NUM near_, NUM *err, NUM *output)
       double pwr = convolution_CB_and_vector(f->err_signal, level_measurement_filter_coeff);
       double level = (+10 * log10(pwr/LEVEL_MEASUREMENT_FILTER_LEN) - 83.11858286715683);
       fprintf(stderr, "level : %g\n", level);
-      if (level < -80)
-	*err=0;
+      if (level < f->param.NLP_thresold)
+      	*err=0;
     }
 
 

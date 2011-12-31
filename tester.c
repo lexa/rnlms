@@ -84,7 +84,7 @@ int main()
   
   assert(NULL != filterStruct);
 
-  rnlms_init(filterStruct, 1.0, 0.00000001, P, FILTER_LEN);
+  rnlms_init(filterStruct, 1.0, 0.00000001, P, FILTER_LEN, -75);
   //  rnlms_set_options(filterStruct, OPT_INHIBIT_ADAPTATION);
   
   testAlgo(filterStruct,	       \

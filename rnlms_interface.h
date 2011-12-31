@@ -27,6 +27,7 @@ typedef struct _RNLMS_params {
   NUM BETTA;
   size_t ERR_BUF_LEN;
   size_t len; 
+  NUM NLP_thresold;
 } RNLMS_params;
 
 /* Хандлер для одного экземпляра адаптивного фильтра, по совместительству - указатель на память фильтра
@@ -37,7 +38,7 @@ typedef struct rnlms_data* rnlms_data_hnd;
 size_t sizeof_rnlms(size_t P, size_t filter_len);
 
 /*Инициализирует адаптивный фильтр, в заранее выделенном блоке памяти и устанавливает его настройки*/
-rnlms_result rnlms_init(rnlms_data_hnd mem, float ALPHA, float BETTA, size_t ERR_BUF_LEN, size_t filter_len);
+rnlms_result rnlms_init(rnlms_data_hnd mem, float ALPHA, float BETTA, size_t ERR_BUF_LEN, size_t filter_len, NUM NLP_thresold);
 rnlms_result rnlms_init_by_struct(rnlms_data_hnd mem, RNLMS_params p);
 
 
@@ -121,6 +122,7 @@ C данной реализацие алгоритма были проведен
 BETTA=10^-7
 ERR_BUF_LEN=300
 Порядок фильтра == задержке в эхотракте
+Нелинейный процессор отключён
 
  */
 #endif 
